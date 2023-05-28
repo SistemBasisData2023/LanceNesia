@@ -1,0 +1,162 @@
+#define __SFR_OFFSET 0x00
+#include "avr/io.h"
+#include "avr/interrupt.h"
+;------------------------
+.global main
+;=================================================================
+main:
+  ;----------------------INISIALISASI---------------------
+  LDI   R21, 0xFF
+  OUT   DDRD, R21
+  RCALL init_serial ; Call sub-routine untuk inisialisasi USART serial monitor
+  LDI   R30, (1<<SPE) ; Enable SPI as slave
+  OUT   SPCR, R30 ; Enable SPI as slave
+  ;-------------------------------------------------------
+
+; Loop infinite
+loop_infinite:
+  RCALL I2C_init
+  RCALL I2C_listen
+  RCALL I2C_read
+  OUT   PORTD, R27  ; Menyalakan LED di PD3
+  RCALL read_temperature_SPI  ; Membaca temperature DHT11 dari master Arduino
+  RCALL delayer ; Delay tambahan untuk efek "toggling" LED
+  LDI   R26, 0x00
+  OUT   PORTD, R26 ; Mematikan LED di PD3
+  RJMP  loop_infinite ; Loop kembali ke label loop_infinite. Loop tidak berhenti
+  ;-------------------------------------------------------
+
+
+; Sub-routine untuk menerima byte dari master Arduino SPI
+read_temperature_SPI:
+loSPI:  
+  IN    R27, SPSR 
+  SBRS  R27, SPIF
+  RJMP  loSPI
+  ;----------------------------
+  IN    R28, SPDR
+  RCALL print_temperature
+  RET 
+
+; Sub-routine print byte temperatur dalam heksadesimal
+print_temperature:
+  RCALL print_msg ; Print message prefix "Temperature: "
+  ;------------------Print Temperature-------------------
+  MOV R16, R28  ; Memindahkan isi R28 ke R16. Serial communication ke monitor fokus menggunakan R16
+  RCALL ASCII_MSD ; Sub-routine untuk mengubah data serial dari nilai decimal ASCII menjadi karakter hex MSD
+  RCALL LCD_buffer ; Menunggu sampai bisa komunikasi (UDR kosong)
+  STS UDR0, R16 ; Menampilkan MSD ke Serial Monitor
+  RCALL ASCII_LSD ; Sub-routine untuk mengubah data serial dari nilai decimal ASCII menjadi karakter hex LSD
+  RCALL LCD_buffer ; Menunggu sampai bisa komunikasi (UDR kosong)
+  STS UDR0, R16 ; Menampilkan LSD ke Serial Monitor
+  ;--------------New line + Carriage return---------------
+  LDI R16, 0x0A ; Nilai ASCII New Line (10) dalam Hex
+  RCALL LCD_buffer ; Menunggu sampai bisa komunikasi (UDR kosong)
+  STS UDR0, R16 ; Menampilkan new line ke serial monitor
+  LDI R16, 0x0D ; Nilai ASCII Carriage Return (13) dalam Hex
+  RCALL LCD_buffer ; Menunggu sampai bisa komunikasi (UDR kosong)
+  STS UDR0, R16 ; Menampilkan carriage return ke serial monitor
+  ;-------------------------------------------------------
+  RET ; Return ke caller
+
+;===================================================================================
+LCD_buffer:
+  LDS R27, UCSR0A ; Memindahkan isi UCSRA ke R27
+  SBRS R27, UDRE0 ; Mengecek apakah UDR kosong melalui flag UDRE pada UCSRA
+  RJMP LCD_buffer ; Jika tidak kosong / UDRE = '0', ulang sub-routine sampai kosong
+  RET ; Jika kosong / UDRE = '1', return ke caller untuk print ke serial monitor
+
+ASCII_MSD:
+  MOV R23, R16 ; Memindahkan hasil ke register temporary R23
+  ANDI R16, 0xF0 ; Mengambil high-nibble dari hasil R16(7:4)
+  SWAP R16 ; Swap 4 bit high-nibble dengan 4-bit low nibble
+  SUBI R16, -48 ; R16 = R16 - (-48) = R16 + 48, konstanta ini adalah offset ke mulainya karakter 0 dalam ASCII
+  MOV R28, R16 ; Memindahkan high byte hasil ke R28
+  SUBI R28, 58 ; Jika positif, dikurangi 58, konstanta ini adalah offset ke mulainya karakter A dalam ASCII
+  BRPL A_F_D1 ; Branch ke A_F_D1 jika negatif untuk dijumlahkan kembali agar bisa mulai dari karakter A dalam ASCII
+l1: RET ; Return ke caller setelah dikurang 58 atau setelah branch A_F_D1
+
+init_serial:
+  CLR R24 ; Set R24 dengan isi 0 semua
+  STS UCSR0A, R24 ; Clear register UCSRA
+  STS UBRR0H, R24 ; Clear register UBRR
+  LDI R24, 51 ; Menyimpan 51 ke R24, angka ini adalah penentu baud rate 9600
+  STS UBRR0L, R24 ; Set baud rate jadi 19200
+  LDI R24, 1<<RXEN0 | 1<<TXEN0 ; Enable RXEN dan TXEN untuk receive dan transmit serial
+  STS UCSR0B, R24 ; Clear UCSRB
+  LDI R24, 1<<UCSZ00 | 1<<UCSZ01; Set mode asinkronus, tidak ada paritas, 1 stop bit, 8-bit data
+  STS UCSR0C, R24 ; Clear UCSRC
+  ;-------------------------------------------------------
+  RET ; Return ke caller
+
+print_msg:
+  LDI R30, lo8(message) ; Mengambil low byte dari message
+  LDI R31, hi8(message) ; Mengambil high byte dari message, Z merujuk ke string message
+agn:
+  LPM R18, Z+ ; Load string character ke R18
+  CPI R18, 0 ; Mengecek apabila akhir dari string ditandai R18 = 0
+  BREQ ext ; Jika akhir string, ke exit
+  RCALL LCD_buffer ; Menunggu sampai bisa komunikasi (UDR kosong)
+  STS UDR0, R18 ; Menampilkan karakter ke serial monitor 
+  RJMP agn ; Loop untuk karakter pada string selanjutnya
+ext:
+RET ; Return ke caller ketika sudah selesai print string message
+;=================================================================================
+message:
+  .ascii "Temperature: " ; String yang ingin diprint
+  .byte 0 ; ASCII value untuk null (penanda akhir dari print string)
+;=================================================================================
+ASCII_LSD:
+  MOV R16, R23 ; Mengembalikan hasil dari register temporary R23 pada proses MSD
+  ANDI R16, 0x0F ; Ekstrak low nibble R16(3:0)
+  SUBI R16, -48 ; R16 = R16 - (-48) = R16 + 48, konstanta ini adalah offset ke mulainya karakter 0 dalam ASCII
+  MOV R28, R16 ; Menyimpan copy dari hasil high byte
+  SUBI R28, 58 ; Jika positif, dikurangi 58, konstanta ini adalah offset ke mulainya karakter A dalam ASCII
+  BRPL A_F_D0 ; Branch ke A_F_D0 jika negatif untuk dijumlahkan kembali agar bisa mulai dari karakter A dalam ASCII
+l2: RET ; Return ke caller 
+;=================================================================================
+A_F_D1:
+  SUBI R16, -7 ; R16 = R16 - (7) = R16 + 7, konstanta ini offset mulainya karakter A dalam ASCII
+  RJMP l1 ; Jump ke l1 untuk return ke caller
+
+A_F_D0:
+  SUBI R16, -7 ;R16 = R16 - (7) = R16 + 7, konstanta ini offset mulainya karakter A dalam ASCII
+  RJMP l2 ; Jump ke l2 untuk return ke caller
+;=================================================================================
+delayer:                   ; Delay roughly 3.11 seconds before turning off LED
+    LDI   R20, 255
+l6: LDI   R21, 255
+l7: LDI   R22, 255
+l8: DEC   R22
+    BRNE  l8
+    DEC   R21
+    BRNE  l7
+    DEC   R20
+    BRNE  l6
+    RET
+;================================================================================
+I2C_init:
+    LDI   R21, 0b10010000
+    STS   TWAR, R21         ;store slave address 0b10010000
+    LDI   R21, (1<<TWEN)
+    STS   TWCR, R21         ;enable TWI
+    LDI   R21, (1<<TWINT)|(1<<TWEN)|(1<<TWEA)
+    STS   TWCR, R21         ;enable TWI & ACK
+    RET
+;==============================================================
+I2C_listen:
+    LDS   R21, TWCR
+    SBRS  R21, TWINT
+    RJMP  I2C_listen        ;wait for slave to be addressed
+    RET
+;==============================================================
+I2C_read:
+    LDI   R21, (1<<TWINT)|(1<<TWEA)|(1<<TWEN)
+    STS   TWCR, R21         ;enable TWI & ACK
+    ;----------------------------------------------------------
+wt: LDS   R21, TWCR
+    SBRS  R21, TWINT
+    RJMP  wt                ;wait for data byte to be read
+    ;----------------------------------------------------------
+    LDS   R27, TWDR         ;store received byte
+    RET
