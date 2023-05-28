@@ -1,2 +1,2 @@
 # LanceNesia
-LanceNesia : Website Freelance by V22 SBD 2023
+LanceNesia 💻👔 : Website Freelance by V22 SBD 2023
