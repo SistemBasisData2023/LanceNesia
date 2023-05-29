@@ -338,9 +338,10 @@ router.get("/getexperience", (req, res) => {
   });
 });
 
-router.get("/getdataone", (req, res) => {
+router.get("/getrole", (req, res) => {
   const username = req.body.username; // query ambil data
-  const query = `SELECT * FROM users WHERE username = ${username}`; // query ambil data
+  console.log("fecth role");
+  const query = `SELECT role FROM users WHERE username = '${username}'`; // query ambil data
   // mendapatkan data dari database
   db.query(query, (err, results) => {
     if (err) {

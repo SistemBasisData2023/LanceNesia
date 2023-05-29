@@ -1,14 +1,16 @@
 /* this query for create table */
+postgres://abdulfikihk:wX7HcPyCLVh3@ep-wispy-frost-810469.ap-southeast-1.aws.neon.tech/test_PP;
+
 CREATE TYPE role_enum AS ENUM ('freelancer', 'client', 'admin');
 
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    username VARCHAR(20) NOT NULL,
+    username VARCHAR(20) NOT NULL UNIQUE,
     phone VARCHAR(20) NOT NULL,
     password VARCHAR(255),
     cpassword VARCHAR(20) NOT NULL,
-    age INT,
+    age VARCHAR(10),
     domicile VARCHAR(30) ,
     short_profile VARCHAR(255),
     role role_enum
