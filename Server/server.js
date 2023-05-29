@@ -203,6 +203,37 @@ router.get("/getprojects", (req, res) => {
   });
 });
 
+router.put("/updateprojects/:project_id", (req, res) => {
+  console.log("Update project with id: ", req.params.project_id);
+  const project_id = req.params.project_id;
+  const { project_name, timeline, job_description, status } = req.body;
+
+  const query = `
+    UPDATE project 
+    SET project_name = $1, 
+        timeline = $2, 
+        job_description = $3,  
+        status = $4
+    WHERE project_id = $5
+    RETURNING *
+  `;
+
+  const values = [project_name, timeline, job_description, status, project_id];
+
+  db.query(query, values, (err, results) => {
+    if (err) {
+      console.error("Error executing the update query: ", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    if (results.rowCount === 0) {
+      res.status(404).send("User not found");
+      return;
+    }
+    res.json(results.rows[0]); // Respond with the updated user
+  });
+});
+
 router.get("/getreports", (req, res) => {
   const query = "SELECT * FROM report"; // query ambil data
   // mendapatkan data dari database
@@ -216,10 +247,86 @@ router.get("/getreports", (req, res) => {
   });
 });
 
-router.post("/getprofile", (req, res) => {
+router.put("/updatereports/:report_id", (req, res) => {
+  console.log("Update report with id: ", req.params.report_id);
+  const report_id = req.params.report_id;
+  const { message } = req.body;
+
+  const query = `
+    UPDATE report 
+    SET message = $1
+    WHERE report_id = $2
+    RETURNING *
+  `;
+
+  const values = [message, report_id];
+
+  db.query(query, values, (err, results) => {
+    if (err) {
+      console.error("Error executing the update query: ", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    if (results.rowCount === 0) {
+      res.status(404).send("User not found");
+      return;
+    }
+    res.json(results.rows[0]); // Respond with the updated user
+  });
+});
+
+router.get("/getprofile", (req, res) => {
   const username = req.body.username; // query ambil data
   console.log(username);
   const query = `SELECT * FROM users WHERE username = '${username}'`; // query ambil data
+  // mendapatkan data dari database
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error executing the data retrieval query: ", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    res.json(results.rows); // Respond with the fetched data
+  });
+});
+
+router.put("/updateprofile/:user_id", (req, res) => {
+  console.log("Update user with id: ", req.params.user_id);
+  const user_id = req.params.user_id;
+  const { name, username, phone, age, domicile, short_profile } = req.body;
+
+  const query = `
+    UPDATE users 
+    SET name = $1, 
+        username = $2, 
+        phone = $3,  
+        age = $4, 
+        domicile = $5, 
+        short_profile = $6
+    WHERE user_id = $7
+    RETURNING *
+  `;
+
+  const values = [name, username, phone, age, domicile, short_profile, user_id];
+
+  db.query(query, values, (err, results) => {
+    if (err) {
+      console.error("Error executing the update query: ", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    if (results.rowCount === 0) {
+      res.status(404).send("User not found");
+      return;
+    }
+    res.json(results.rows[0]); // Respond with the updated user
+  });
+});
+
+router.get("/getexperience", (req, res) => {
+  const freelancer_id = req.body.freelancer_id; // query ambil data
+  console.log(freelancer_id);
+  const query = `SELECT * FROM freelancer_experience WHERE freelancer_id = '${freelancer_id}'`; // query ambil data
   // mendapatkan data dari database
   db.query(query, (err, results) => {
     if (err) {
