@@ -13,7 +13,7 @@ const bcrypt = require("bcrypt");
 const db = new Client({
   user: "abdulfikihk",
   host: "ep-wispy-frost-810469.ap-southeast-1.aws.neon.tech",
-  database: "trans_SBD",
+  database: "test_PP",
   password: "wX7HcPyCLVh3",
   port: 5432,
   sslmode: "require",
@@ -92,9 +92,13 @@ router.post("/login", (req, res) => {
 // Router 3: Proses register
 router.post("/register", (req, res) => {
   const name = req.body.name;
-  const username = req.body.email;
+  const username = req.body.username;
   const phone = req.body.phone;
   const password = req.body.password;
+  const age = req.body.age;
+  const domicile = req.body.domicile;
+  const short_profile = req.body.short_profile;
+  const role = req.body.role;
 
   // Hash password using bcrypt
   bcrypt.hash(password, 10, (err, hash) => {
@@ -105,23 +109,26 @@ router.post("/register", (req, res) => {
     }
 
     // Insert new user into the database
-    db.query(`INSERT INTO users (name, username, phone, password, cpassword) VALUES ('${name}', '${username}', '${phone}','${hash}', '${password}' )`, (err, result) => {
-      if (err) {
-        console.error("Error inserting new user:", err);
-        res.send(false); // Registration failed, send 'failed' response
-        return;
+    db.query(
+      `INSERT INTO users (name, username, phone, password, cpassword, age, domicile, short_profile, role) VALUES ('${name}', '${username}', '${phone}','${hash}', '${password}', '${age}', '${domicile}', '${short_profile}', '${role}' )`,
+      (err, result) => {
+        if (err) {
+          console.error("Error inserting new user:", err);
+          res.send(false); // Registration failed, send 'failed' response
+          return;
+        }
+        // Set session and send 'done' response
+        req.session.username = username;
+        res.send(true);
       }
-      // Set session and send 'done' response
-      req.session.username = username;
-      res.send(true);
-    });
+    );
   });
 });
 
 //router 4: melakukan delete data dari database
 router.post("/delete", (req, res) => {
   const id = req.body.id; // ID data yang akan dihapus
-  const query = `DELETE FROM users WHERE id = ${id}`; // query hapus data
+  const query = `DELETE FROM users WHERE user_id = ${id}`; // query hapus data
 
   //menghapus data_gaming berdasarkan id
   db.query(query, (err, results) => {

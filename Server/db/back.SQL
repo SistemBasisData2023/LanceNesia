@@ -3,12 +3,13 @@ CREATE TYPE role_enum AS ENUM ('freelancer', 'client', 'admin');
 
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    username VARCHAR(20) NOT NULL,
     phone VARCHAR(20) NOT NULL,
     password VARCHAR(255),
     cpassword VARCHAR(20) NOT NULL,
-    age INT NOT NULL,
-    domicile VARCHAR(30) NOT NULL,
+    age INT,
+    domicile VARCHAR(30) ,
     short_profile VARCHAR(255),
     role role_enum
 );
@@ -63,10 +64,10 @@ CREATE TABLE REPORT (
 );
 
 /* This query for insert data */
-INSERT INTO USERS (username, phone, password, cpassword, age, domicile, Short_profile, role)
-VALUES ('john_doe', '08123456789', ' ', 'password123', 20, 'Jakarta', 'Lorem ipsum dolor sit amet.', 'freelancer'),
-       ('jane_smith', '087654321', ' ', 'securepass', 19, 'Bandung', 'Consectetur adipiscing elit.', 'client'),
-       ('admin', '08111111111', ' ', 'adminpass', 18, 'Surabaya', 'Nulla vitae elit libero.', 'admin');
+INSERT INTO USERS (name, username, phone, password, cpassword, age, domicile, Short_profile, role)
+VALUES ('John Doe','john_doe@gmail.com', '08123456789', ' ', 'password123', 20, 'Jakarta', 'Lorem ipsum dolor sit amet.', 'freelancer'),
+       ('Jane Smith', 'jane_smith@gmail.com', '087654321', ' ', 'securepass', 19, 'Bandung', 'Consectetur adipiscing elit.', 'client'),
+       ('Admin', 'admin@gmail.com', '08111111111', ' ', 'adminpass', 18, 'Surabaya', 'Nulla vitae elit libero.', 'admin');
 
 
 INSERT INTO FREELANCER_EXPERIENCE (freelancer_id, project_name, date, short_job_description, employer_details)
