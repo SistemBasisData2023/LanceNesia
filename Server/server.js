@@ -126,9 +126,55 @@ router.post("/register", (req, res) => {
 });
 
 //router 4: melakukan delete data dari database
-router.post("/delete", (req, res) => {
-  const id = req.body.id; // ID data yang akan dihapus
-  const query = `DELETE FROM users WHERE user_id = ${id}`; // query hapus data
+router.post("/deleteusers", (req, res) => {
+  const users_id = req.body.users_id; // ID data yang akan dihapus
+
+  // Mengubah referensi kunci asing di tabel "freelancer" menjadi NULL
+  const updateQuery = `UPDATE freelancer SET user_id = NULL WHERE user_id = '${users_id}'`;
+
+  // Query untuk menghapus data dari tabel "users"
+  const deleteQuery = `DELETE FROM users WHERE user_id = '${users_id}'`;
+
+  // Mengubah referensi kunci asing di tabel "freelancer" menjadi NULL terlebih dahulu
+  db.query(updateQuery, (updateErr, updateResults) => {
+    if (updateErr) {
+      console.error("Error updating the foreign key reference: ", updateErr);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+
+    // Menghapus data dari tabel "users" setelah mengubah referensi kunci asing di tabel "freelancer"
+    db.query(deleteQuery, (deleteErr, deleteResults) => {
+      if (deleteErr) {
+        console.error("Error executing the delete query: ", deleteErr);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      console.log("Data deleted successfully");
+      res.end("done");
+    });
+  });
+});
+
+//router 5: melakukan pemngambilan data dari database
+router.get("/getusers", (req, res) => {
+  const query = "SELECT * FROM users"; // query ambil data
+  // mendapatkan data dari database
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error executing the data retrieval query: ", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    res.json(results.rows); // Respond with the fetched data
+  });
+});
+
+router.post("/deleteprojects", (req, res) => {
+  const project_id = req.body.project_id; // ID data yang akan dihapus
+  console.log(project_id);
+  const query = `DELETE FROM project WHERE project_id = '${project_id}'`; // query hapus data
 
   //menghapus data_gaming berdasarkan id
   db.query(query, (err, results) => {
@@ -144,8 +190,8 @@ router.post("/delete", (req, res) => {
 });
 
 //router 5: melakukan pemngambilan data dari database
-router.post("/getdata", (req, res) => {
-  const query = "SELECT * FROM users"; // query ambil data
+router.get("/getprojects", (req, res) => {
+  const query = "SELECT * FROM project"; // query ambil data
   // mendapatkan data dari database
   db.query(query, (err, results) => {
     if (err) {
@@ -157,7 +203,35 @@ router.post("/getdata", (req, res) => {
   });
 });
 
-router.post("/getdataone", (req, res) => {
+router.get("/getreports", (req, res) => {
+  const query = "SELECT * FROM report"; // query ambil data
+  // mendapatkan data dari database
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error executing the data retrieval query: ", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    res.json(results.rows); // Respond with the fetched data
+  });
+});
+
+router.post("/getprofile", (req, res) => {
+  const username = req.body.username; // query ambil data
+  console.log(username);
+  const query = `SELECT * FROM users WHERE username = '${username}'`; // query ambil data
+  // mendapatkan data dari database
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error executing the data retrieval query: ", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    res.json(results.rows); // Respond with the fetched data
+  });
+});
+
+router.get("/getdataone", (req, res) => {
   const username = req.body.username; // query ambil data
   const query = `SELECT * FROM users WHERE username = ${username}`; // query ambil data
   // mendapatkan data dari database
