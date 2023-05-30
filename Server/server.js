@@ -95,9 +95,9 @@ router.post("/register", (req, res) => {
   const username = req.body.username;
   const phone = req.body.phone;
   const password = req.body.password;
-  const age = req.body.age;
-  const domicile = req.body.domicile;
-  const short_profile = req.body.short_profile;
+  const age = " ";
+  const domicile = " ";
+  const short_profile = " ";
   const role = req.body.role;
 
   // Hash password using bcrypt
@@ -338,18 +338,19 @@ router.get("/getexperience", (req, res) => {
   });
 });
 
-router.get("/getrole", (req, res) => {
-  const username = req.body.username; // query ambil data
-  console.log("fecth role");
-  const query = `SELECT role FROM users WHERE username = '${username}'`; // query ambil data
-  // mendapatkan data dari database
+router.post("/getrole", (req, res) => {
+  const username = req.body.username;
+  console.log("fetching role");
+
+  const query = `SELECT role FROM users WHERE username = '${username}'`;
   db.query(query, (err, results) => {
     if (err) {
       console.error("Error executing the data retrieval query: ", err);
       res.status(500).send("Internal Server Error");
       return;
     }
-    res.json(results.rows); // Respond with the fetched data
+    res.json(results.rows);
+    console.log(results.rows);
   });
 });
 
