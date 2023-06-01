@@ -298,6 +298,23 @@ router.post("/deletereports", (req, res) => {
   });
 });
 
+router.get("/getreportsone", (req, res) => {
+  const report_id = req.query.report_id; // Menggunakan req.query untuk mendapatkan query parameter
+  console.log("reportID", report_id);
+  const query = `SELECT * FROM report WHERE report_id = $1`; // Menggunakan parameterized query
+  const values = [report_id];
+
+  // mendapatkan data dari database
+  db.query(query, values, (err, results) => {
+    if (err) {
+      console.error("Error executing the data retrieval query: ", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    res.json(results.rows); // Respond with the fetched data
+  });
+});
+
 router.put("/updatereports/:report_id", (req, res) => {
   console.log("Update report with id: ", req.params.report_id);
   const report_id = req.params.report_id;

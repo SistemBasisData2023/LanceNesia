@@ -5,6 +5,8 @@ CREATE TYPE role_enum AS ENUM ('freelancer', 'client', 'admin');
 
 CREATE TYPE category_enum AS ENUM ('Web Developer', 'Data Analytic', 'Android Developer', 'Designer', 'Video Grapher', 'Article Writing', 'Graphic Design' );
 
+CREATE TYPE level_enum AS ENUM ('Beginner', 'Intermediate', 'Expert');
+
 CREATE TYPE access_enum AS ENUM ('Active', 'Banned');
 
 CREATE TABLE users (
@@ -16,7 +18,7 @@ CREATE TABLE users (
     cpassword VARCHAR(20) NOT NULL,
     age VARCHAR(10),
     domicile VARCHAR(30) ,
-    short_profile VARCHAR(255),
+    short_profile TEXT,
     role role_enum,
     access access_enum
 );
@@ -26,6 +28,8 @@ ADD COLUMN status access_enum;
 
 CREATE TABLE FREELANCER (
     user_id SERIAL PRIMARY KEY,
+    category category_enum,
+    experience level_enum,
     FOREIGN KEY (user_id) REFERENCES USERS(user_id)
 );
 
@@ -34,8 +38,8 @@ CREATE TABLE FREELANCER_EXPERIENCE (
     freelancer_id SERIAL,
     project_name VARCHAR(50) NOT NULL,
     date DATE NOT NULL,
-    short_job_description VARCHAR(255) NOT NULL,
-    employer_details VARCHAR(255) NOT NULL,
+    short_job_description TEXT NOT NULL,
+    employer_details TEXT NOT NULL,
     FOREIGN KEY (freelancer_id) REFERENCES FREELANCER(user_id)
 );
 
@@ -52,7 +56,7 @@ CREATE TABLE PROJECT (
     client_id SERIAL,
     project_name VARCHAR(50) NOT NULL,
     timeline VARCHAR(50) NOT NULL,
-    job_description VARCHAR(255) NOT NULL,
+    job_description TEXT NOT NULL,
     status status_enum NOT NULL,
     FOREIGN KEY (client_id) REFERENCES CLIENT(user_id)
 );
@@ -65,10 +69,13 @@ CREATE TABLE PROJECT_FREELANCER (
     FOREIGN KEY (freelancer_id) REFERENCES FREELANCER(user_id)
 );
 
+CREATE TYPE report_status AS ENUM ('ACCEPTED', 'PENDING', 'REJECTED');
+
 CREATE TABLE REPORT (
     report_id SERIAL PRIMARY KEY,
     reporter_id SERIAL,
-    message VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    status report_status DEFAULT 'PENDING',
     FOREIGN KEY (reporter_id) REFERENCES USERS(user_id)
 );
 
