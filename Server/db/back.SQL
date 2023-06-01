@@ -3,6 +3,10 @@ postgres://abdulfikihk:wX7HcPyCLVh3@ep-wispy-frost-810469.ap-southeast-1.aws.neo
 
 CREATE TYPE role_enum AS ENUM ('freelancer', 'client', 'admin');
 
+CREATE TYPE category_enum AS ENUM ('Web Developer', 'Data Analytic', 'Android Developer', 'Designer', 'Video Grapher', 'Article Writing', 'Graphic Design' );
+
+CREATE TYPE access_enum AS ENUM ('Active', 'Banned');
+
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
@@ -13,9 +17,12 @@ CREATE TABLE users (
     age VARCHAR(10),
     domicile VARCHAR(30) ,
     short_profile VARCHAR(255),
-    role role_enum
+    role role_enum,
+    access access_enum
 );
 
+ALTER TABLE users
+ADD COLUMN status access_enum;
 
 CREATE TABLE FREELANCER (
     user_id SERIAL PRIMARY KEY,
