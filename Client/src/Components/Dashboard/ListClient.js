@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { BadgeCheckIcon, XIcon, DotsVerticalIcon } from "@heroicons/react/solid";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "./Components/Sidebar";
-import Navbar from "./Components/NavbarBlack";
-import Footer from "./Components/Footer";
+import { CheckIcon as BadgeCheckIcon, XCircleIcon as XIcon, EllipsisVerticalIcon as DotsVerticalIcon } from "@heroicons/react/24/solid";
+import Sidebar from "../Sidebar";
+import Navbar from "../NavbarBlack";
+import Footer from "../Footer";
 
 const UserListPage = () => {
   const [users, setUsers] = useState([]);
@@ -25,7 +25,7 @@ const UserListPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("/getlistfreelance");
+        const response = await fetch("/getlistclient");
         const data = await response.json();
 
         // Mengubah data yang diterima sesuai dengan kebutuhan
@@ -74,7 +74,7 @@ const UserListPage = () => {
   const handleEdit = (user) => {
     window.globalUserId = user.user_id;
     console.log("Edit user:", user);
-    navigate("/Dashboard/ListFreelance/UpdateUsers");
+    navigate("/Dashboard/ListClient/UpdateUsers");
   };
 
   const handleDelete = (user) => {

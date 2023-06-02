@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BadgeCheckIcon, XIcon, DotsVerticalIcon } from "@heroicons/react/solid";
-import Sidebar from "./Components/Sidebar";
-import Navbar from "./Components/NavbarBlack";
-import Footer from "./Components/Footer";
+import { CheckIcon as BadgeCheckIcon, XCircleIcon as XIcon, EllipsisVerticalIcon as DotsVerticalIcon } from "@heroicons/react/24/solid";
+import Sidebar from "../Sidebar";
+import Navbar from "../NavbarBlack";
+import Footer from "../Footer";
 
 const ListReport = () => {
   const [reports, setReports] = useState([]);

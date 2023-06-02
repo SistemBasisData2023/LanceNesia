@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BadgeCheckIcon, XIcon, DotsVerticalIcon, EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
-import Sidebar from "./Components/Sidebar";
-import Navbar from "./Components/NavbarBlack";
-import Footer from "./Components/Footer";
+import Sidebar from "../Sidebar";
+import Navbar from "../NavbarBlack";
+import Footer from "../Footer";
 
 const UpdateProject = () => {
   const [isLoading, setIsLoading] = useState(true);

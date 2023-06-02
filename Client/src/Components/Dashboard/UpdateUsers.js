@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BadgeCheckIcon, XIcon, DotsVerticalIcon, EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
-import Sidebar from "./Components/Sidebar";
-import Navbar from "./Components/NavbarBlack";
-import Footer from "./Components/Footer";
+import { EyeIcon, EyeSlashIcon as EyeOffIcon } from "@heroicons/react/24/solid";
+import Sidebar from "../Sidebar";
+import Navbar from "../NavbarBlack";
+import Footer from "../Footer";
 
 const UpdateUsers = () => {
   const [isLoading, setIsLoading] = useState(true);

@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { CheckIcon as BadgeCheckIcon, XCircleIcon as XIcon, EllipsisVerticalIcon as DotsVerticalIcon } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
-import { BadgeCheckIcon, XIcon, DotsVerticalIcon } from "@heroicons/react/solid";
-import Sidebar from "./Components/Sidebar";
-import Navbar from "./Components/NavbarBlack";
-import Footer from "./Components/Footer";
+import Sidebar from "../Sidebar";
+import Navbar from "../NavbarBlack";
+import Footer from "../Footer";
 
-const ListProject = () => {
-  const [projects, setProjects] = useState([]);
+const UserListPage = () => {
+  const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTableIndex, setActiveTableIndex] = useState(0);
   const [activeMenu, setActiveMenu] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [projectPerPage] = useState(10);
+  const [usersPerPage] = useState(10);
   const navigate = useNavigate();
 
   const preloader = document.getElementById("preloader");
@@ -24,30 +23,29 @@ const ListProject = () => {
   }
 
   useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("/getlistfreelance");
+        const data = await response.json();
+
+        // Mengubah data yang diterima sesuai dengan kebutuhan
+        const transformedData = data.map((user) => ({
+          user_id: user.user_id,
+          name: user.name,
+          username: user.username,
+          role: user.role,
+          status: user.status,
+        }));
+
+        setUsers(transformedData);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     fetchUsers();
   }, []);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch("/getprojects");
-      const data = await response.json();
-
-      // Mengubah data yang diterima sesuai dengan kebutuhan
-      const transformedData = data.map((project) => ({
-        project_id: project.project_id,
-        client_id: project.client_id,
-        project_name: project.project_name,
-        timeline: project.timeline,
-        description: project.job_description,
-        status: project.status,
-      }));
-
-      setProjects(transformedData);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const handleTableClick = (table) => {
     setActiveTableIndex(table);
@@ -73,29 +71,20 @@ const ListProject = () => {
     }
   };
 
-  const handleEdit = (project) => {
-    window.globalProjectId = project.project_id;
-    console.log("Edit report:", project);
-    navigate("/Dashboard/ListProject/UpdateProject");
+  const handleEdit = (user) => {
+    window.globalUserId = user.user_id;
+    console.log("Edit user:", user);
+    navigate("/Dashboard/ListFreelance/UpdateUsers");
   };
 
-  const handleDelete = (project) => {
-    axios
-      .post("/deleteprojects", { project_id: project.project_id })
-      .then((response) => {
-        console.log("Data deleted successfully");
-        // Panggil kembali fungsi fetchUsers setelah penghapusan berhasil
-        fetchUsers();
-      })
-      .catch((error) => {
-        console.error("Error deleting data: ", error);
-      });
+  const handleDelete = (user) => {
+    console.log("Delete user:", user);
   };
 
-  // Get current projects
-  const indexOfLastUser = currentPage * projectPerPage;
-  const indexOfFirstProject = indexOfLastUser - projectPerPage;
-  const currentProject = projects.slice(indexOfFirstProject, indexOfLastUser);
+  // Get current users
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
 
   // Change page
   const paginate = (pageNumber) => {
@@ -117,23 +106,35 @@ const ListProject = () => {
                   <thead>
                     <tr>
                       <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">No</th>
-                      <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">ID Project</th>
-                      <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">ID Client</th>
-                      <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">Title</th>
-                      <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">Timeline</th>
+                      <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">ID</th>
+                      <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">Name</th>
+                      <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">Username</th>
+                      <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">Role</th>
                       <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">Status</th>
                       <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {currentProject.map((project, index) => (
+                    {currentUsers.map((user, index) => (
                       <tr key={index} className="border-b">
-                        <td className="px-6 py-4 whitespace-nowrap">{indexOfFirstProject + index + 1}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{project.project_id} </td>
-                        <td className="px-6 py-4 whitespace-nowrap">{project.client_id}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{project.project_name}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{project.timeline}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{project.status}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{indexOfFirstUser + index + 1}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{user.user_id} </td>
+                        <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{user.username}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{user.role}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {user.status === "Banned" ? (
+                            <span className="flex items-center">
+                              <span className="text-red-500 mr-1">Banned</span>
+                              <XIcon className="h-5 w-5 text-red-500" />
+                            </span>
+                          ) : (
+                            <span className="flex items-center">
+                              <span className="text-green-500 mr-1">Active</span>
+                              <BadgeCheckIcon className="h-5 w-5 text-green-500" />
+                            </span>
+                          )}
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="relative inline-block">
                             <button className="text-gray-500 hover:text-gray-700" onClick={() => handleMenuClick(index)}>
@@ -141,10 +142,10 @@ const ListProject = () => {
                             </button>
                             {activeMenu === index && (
                               <div className="absolute top-0 left-6 mb-0 w-20 bg-white shadow-lg rounded-md p-2">
-                                <button className="text-gray-500 hover:text-yellow-500 block w-full text-left" onClick={() => handleEdit(project)}>
+                                <button className="text-gray-500 hover:text-yellow-500 block w-full text-left" onClick={() => handleEdit(user)}>
                                   Edit
                                 </button>
-                                <button className="text-gray-500 hover:text-yellow-500 block w-full text-left" onClick={() => handleDelete(project)}>
+                                <button className="text-gray-500 hover:text-yellow-500 block w-full text-left" onClick={() => handleDelete(user)}>
                                   Delete
                                 </button>
                               </div>
@@ -164,15 +165,15 @@ const ListProject = () => {
             {activeTableIndex === 0 && (
               <nav>
                 <ul className="flex justify-center">
-                  {projects.length > 0 &&
-                    Array.from({ length: Math.ceil(projects.length / projectPerPage) }, (_, i) => (
+                  {users.length > 0 &&
+                    Array.from({ length: Math.ceil(users.length / usersPerPage) }, (_, i) => (
                       <li key={i}>
                         <button className={`mx-2 px-3 py-1 rounded-full ${currentPage === i + 1 ? "bg-gray-700 text-white" : "bg-gray-300 text-gray-700"}`} onClick={() => paginate(i + 1)}>
                           {i + 1}
                         </button>
                       </li>
                     ))}
-                  {projects.length > projectPerPage * 3 && (
+                  {users.length > usersPerPage * 3 && (
                     <li>
                       <button className="mx-2 px-3 py-1 rounded-full bg-gray-300 text-gray-700" onClick={() => handleNextTable()}>
                         &raquo;
@@ -190,4 +191,4 @@ const ListProject = () => {
   );
 };
 
-export default ListProject;
+export default UserListPage;

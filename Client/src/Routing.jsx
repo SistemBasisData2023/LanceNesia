@@ -12,13 +12,14 @@ import Profile from "./Components/Profile";
 import GetHired from "./Components/GetHired";
 import FindFreelancer from "./FindFreelancer";
 import Dashboard from "./Dashboard";
-import ListFreelance from "./ListFreelance";
-import ListClient from "./ListClient";
-import ListProject from "./ListProject";
-import ListReport from "./ListReport";
-import UpdateUsers from "./UpdateUsers";
-import UpdateReport from "./UpdateReport";
-import UpdateProject from "./UpdateProject";
+import ListFreelance from "./Components/Dashboard/ListFreelance";
+import ListClient from "./Components/Dashboard/ListClient";
+import ListProject from "./Components/Dashboard/ListProject";
+import ListReport from "./Components/Dashboard/ListReport";
+import UpdateUsers from "./Components/Dashboard/UpdateUsers";
+import UpdateReport from "./Components/Dashboard/UpdateReport";
+import UpdateProject from "./Components/Dashboard/UpdateProject";
+import UpdateProfile from "./UpdateProfile";
 
 // Context API
 export const UserContext = createContext();
@@ -57,6 +58,7 @@ const Paths = () => {
       <Route path="/FindFreelancer/Profile/Home" element={<App />}></Route>
       <Route path="/FindFreelancer/Logout" element={<Logout />}></Route>
       <Route path="/FindFreelancer/PostJobs" element={<PostJobs />}></Route>
+      <Route path="/Profile" element={<UpdateProfile />}></Route>
       <Route path="/Dev" element={<Error />}></Route>
 
       <Route path="/Logout" element={<Logout />}></Route>
