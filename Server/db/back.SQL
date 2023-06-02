@@ -1,4 +1,4 @@
-/* this query for create table */
+/* this query for enum table */
 
 CREATE TYPE role_enum AS ENUM ('freelancer', 'client', 'admin');
 
@@ -7,6 +7,12 @@ CREATE TYPE category_enum AS ENUM ('Web Developer', 'Data Analytic', 'Android De
 CREATE TYPE level_enum AS ENUM ('Beginner', 'Intermediate', 'Expert');
 
 CREATE TYPE access_enum AS ENUM ('Active', 'Banned');
+
+CREATE TYPE report_status AS ENUM ('ACCEPTED', 'PENDING', 'REJECTED');
+
+CREATE TYPE status_enum AS ENUM ('PENDING', 'DENIED', 'ACCEPTED', 'NOT STARTED', '25%', '50%', '75%', 'DONE');
+
+/* This query for create table */
 
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
@@ -22,13 +28,11 @@ CREATE TABLE users (
     access access_enum
 );
 
-ALTER TABLE users
-ADD COLUMN status access_enum;
-
 CREATE TABLE FREELANCER (
     user_id SERIAL PRIMARY KEY,
     category category_enum,
     experience level_enum,
+    expected_salary VARCHAR(20),
     FOREIGN KEY (user_id) REFERENCES USERS(user_id)
 );
 
@@ -48,8 +52,6 @@ CREATE TABLE CLIENT (
     FOREIGN KEY (user_id) REFERENCES USERS(user_id)
 );
 
-CREATE TYPE status_enum AS ENUM ('PENDING', 'DENIED', 'ACCEPTED', 'NOT STARTED', '25%', '50%', '75%', 'DONE');
-
 CREATE TABLE PROJECT (
     project_id SERIAL PRIMARY KEY,
     client_id SERIAL,
@@ -67,8 +69,6 @@ CREATE TABLE PROJECT_FREELANCER (
     FOREIGN KEY (project_id) REFERENCES PROJECT(project_id),
     FOREIGN KEY (freelancer_id) REFERENCES FREELANCER(user_id)
 );
-
-CREATE TYPE report_status AS ENUM ('ACCEPTED', 'PENDING', 'REJECTED');
 
 CREATE TABLE REPORT (
     report_id SERIAL PRIMARY KEY,
@@ -124,3 +124,6 @@ VALUES
 ALTER TABLE users
   ALTER COLUMN username SET NOT NULL,
   ADD CONSTRAINT unique_username UNIQUE (username);
+
+ALTER TABLE freelancer
+ADD COLUMN expected_salary VARCHAR(20);
