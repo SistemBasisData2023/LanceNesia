@@ -30,6 +30,7 @@ const Navbar = (props) => {
         console.log("User Role:", data[0].role);
         setUserRole(data[0].role);
         window.globalName = data[0].name;
+        dispatch(window.globalState);
         console.log("User Name:", window.globalName);
       } catch (error) {
         console.log("Error fetching user role:", error);
@@ -37,7 +38,7 @@ const Navbar = (props) => {
     };
 
     fetchUserRole();
-  }, []);
+  }, [dispatch]);
 
   //* Login/Logout Functionality
   const RenderMenu = () => {
@@ -148,26 +149,6 @@ const Navbar = (props) => {
                 <li>
                   <NavLink to="/Dashboard" id="nav-a">
                     Dashboard
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/Users" id="nav-a">
-                    List Users
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/FindJobs" id="nav-a">
-                    Project
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/FindFreelancer" id="nav-a">
-                    Freelancer
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/Dev" id="nav-a">
-                    Report
                   </NavLink>
                 </li>
               </>

@@ -1,5 +1,4 @@
 /* this query for create table */
-postgres://abdulfikihk:wX7HcPyCLVh3@ep-wispy-frost-810469.ap-southeast-1.aws.neon.tech/test_PP;
 
 CREATE TYPE role_enum AS ENUM ('freelancer', 'client', 'admin');
 

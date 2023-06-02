@@ -48,7 +48,7 @@ const Navbar = (props) => {
       return (
         <div id="ndb">
           <button className="nbutton" id="nav-btn">
-            <NavLink to="./Logout" id="nav-btn-a">
+            <NavLink to="/Logout" id="nav-btn-a">
               Logout
             </NavLink>
           </button>
@@ -132,6 +132,16 @@ const Navbar = (props) => {
                     Find Project
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink to="/Dev" id="nav-a">
+                    List Project
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/Profile" id="nav-a">
+                    Profile
+                  </NavLink>
+                </li>
               </>
             )}
             {state && userRole === "client" && (
@@ -139,6 +149,16 @@ const Navbar = (props) => {
                 <li>
                   <NavLink to="/FindFreelancer" id="nav-a">
                     Find Freelancers
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/Dev" id="nav-a">
+                    Projects
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/Profile" id="nav-a">
+                    Profile
                   </NavLink>
                 </li>
               </>
@@ -151,32 +171,12 @@ const Navbar = (props) => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/Users" id="nav-a">
-                    List Users
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/FindJobs" id="nav-a">
-                    Project
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/FindFreelancer" id="nav-a">
-                    Freelancer
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/Dev" id="nav-a">
-                    Report
+                  <NavLink to="/Profile" id="nav-a">
+                    Profile
                   </NavLink>
                 </li>
               </>
             )}
-            <li>
-              <NavLink to="/Profile" id="nav-a">
-                Profile
-              </NavLink>
-            </li>
           </ul>
           <RenderMenu />
         </nav>

@@ -206,7 +206,16 @@ const App = () => {
                 See More
               </button>
             </div>
-            <img data-aos="fade-down-left" data-aos-offset="400" data-aos-duration="4000" data-aos-easing="ease-out" id="g-img" src="https://ik.imagekit.io/bhanu1776/Freelansters/glass-right.png?updatedAt=1682608753541" alt="Freelanster" />
+            <img
+              data-aos="fade-down-left"
+              data-aos-offset="400"
+              data-aos-duration="4000"
+              data-aos-easing="ease-out"
+              id="g-img"
+              src="https://ik.imagekit.io/abdfikih/Asset_3ssssddd.png?updatedAt=1685690206806"
+              alt="LanceNesia"
+              style={{ maxWidth: "120%", maxHeight: "120%", width: "auto", height: "auto", marginLeft: "80px" }}
+            />
           </div>
         </section>
 
@@ -243,12 +252,23 @@ const App = () => {
               <p>
                 No job is too big or too small. We've got freelancers for job of any size or budget with extra-ordinary skill. <br /> <b> No job is complex. We can get it done!</b>
               </p>
-              <h3>Pay Securely</h3>
-              <p>One pay for work when it has been completed and you're 100% statisfied with the quality using our milestone payment system.</p>
+              <h3>Get Projects Aligned with Your Skills</h3>
+              <p>
+                You will be matched with projects that align with your skills through our milestone payment system. You will only pay after the work is completed and you're 100% satisfied with the quality using our interactive application.
+              </p>
               <h3>We're here to help</h3>
               <p>Our talented team of recruiter can help you find the best freelancer for the job and our technical co-pilots can even manage the project for you.</p>
             </div>
-            <img data-aos="flip-right" data-aos-offset="400" data-aos-easing="ease-out" data-aos-duration="4000" src="https://ik.imagekit.io/bhanu1776/Freelansters/Features.png?updatedAt=1682608753683" alt="" className="f-img" />
+            <img
+              data-aos="flip-right"
+              data-aos-offset="400"
+              data-aos-easing="ease-out"
+              data-aos-duration="4000"
+              src="https://ik.imagekit.io/abdfikih/Asset_1_fikih.png?updatedAt=1685689264817"
+              alt=""
+              className="f-img"
+              style={{ maxWidth: "120%", maxHeight: "120%", width: "auto", height: "auto", marginLeft: "60px" }}
+            />
 
             <span data-aos="flip-right" data-aos-offset="400" data-aos-easing="ease-out" data-aos-duration="4000" className="circle">
               <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="1.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg">

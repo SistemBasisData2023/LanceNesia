@@ -2,8 +2,8 @@
 
 const express = require("express");
 const bcrypt = require("bcrypt");
-const app = require("./middleware");
-const db = require("./model");
+const app = require("../middleware/middleware");
+const db = require("../models/model");
 
 const router = express.Router();
 
@@ -67,7 +67,6 @@ router.post("/register", (req, res) => {
   const domicile = " ";
   const short_profile = " ";
   const role = req.body.role;
-  const status = "Banned";
 
   // Hash password using bcrypt
   bcrypt.hash(password, 10, (err, hash) => {
@@ -79,7 +78,7 @@ router.post("/register", (req, res) => {
 
     // Insert new user into the database
     db.query(
-      `INSERT INTO users (name, username, phone, password, cpassword, age, domicile, short_profile, role, status) VALUES ('${name}', '${username}', '${phone}','${hash}', '${password}', '${age}', '${domicile}', '${short_profile}', '${role}', '${status}' )`,
+      `INSERT INTO users (name, username, phone, password, cpassword, age, domicile, short_profile, role) VALUES ('${name}', '${username}', '${phone}','${hash}', '${password}', '${age}', '${domicile}', '${short_profile}', '${role}' )`,
       (err, result) => {
         if (err) {
           console.error("Error inserting new user:", err);

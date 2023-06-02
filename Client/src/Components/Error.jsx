@@ -107,7 +107,7 @@ const Error = () => {
               </h1>
               <h2 className="Main-h2">Error: 404 Page Not Found</h2>
               <p className="Main-p">Website Dalam Pengembangan. Yooo Mari-Mari Ke Home. Terima Kasih</p>
-              <a href="/" className="myButton">
+              <a href="/Home" className="myButton">
                 Home
               </a>
             </main>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { BadgeCheckIcon, XIcon, DotsVerticalIcon } from "@heroicons/react/solid";
+import { CheckIcon as BadgeCheckIcon, XCircleIcon as XIcon, EllipsisVerticalIcon as DotsVerticalIcon } from "@heroicons/react/24/solid";
+
 import Sidebar from "./Components/Sidebar";
 import Navbar from "./Components/NavbarBlack";
 import Footer from "./Components/Footer";

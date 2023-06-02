@@ -95,6 +95,7 @@ const Login = () => {
     } else {
       console.log("Login Toast");
       dispatch({ type: "USER", payload: true });
+      window.globalState = true;
       toast.success("Login Successful", {
         position: "bottom-right",
         theme: "colored",

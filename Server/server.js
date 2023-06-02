@@ -1,8 +1,8 @@
 // index.js
 
 const express = require("express");
-const app = require("./middleware");
-const router = require("./router");
+const app = require("./middleware/middleware");
+const router = require("./router/router");
 
 // Menggunakan router sebagai middleware
 app.use("/", router);

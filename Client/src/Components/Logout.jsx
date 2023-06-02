@@ -20,6 +20,7 @@ const Logout = () => {
     })
       .then((res) => {
         dispatch({ type: "USER", payload: false });
+        window.globalState = false;
         navigate("/login");
         window.globalName = " ";
         if (!res.status === 200) {
