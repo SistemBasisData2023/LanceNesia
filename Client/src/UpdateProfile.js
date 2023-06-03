@@ -12,6 +12,7 @@ const UpdateUsers = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
+    user_id: window.globalUserId || "",
     name: "",
     username: "",
     phone: "",
@@ -22,15 +23,16 @@ const UpdateUsers = () => {
     short_profile: "",
     experience: "",
     category: "",
-    salary: "",
+    expected_salary: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     // Lakukan permintaan GET untuk mendapatkan data pengguna
+    console.log("user Id: ", window.globalUserId);
     axios
-      .get(`/getdatafreelance?username=${window.globalUsername}`)
+      .get(`/getdatafreelance?user_id=${window.globalUserId}`)
       .then((response) => {
         const userData = response.data[0]; // Mengambil data pertama dari array
         setFormData(userData);
@@ -52,14 +54,16 @@ const UpdateUsers = () => {
   };
 
   const handleSubmit = (e) => {
+    console.log("User ID: ", window.globalUserId);
+    formData.user_id = window.globalUserId;
     e.preventDefault();
     // Kirim data update ke backend
     axios
-      .put(`/updateusers/${window.globalUsername}`, formData)
+      .put(`/updatedatafreelancer`, formData)
       .then((response) => {
         console.log("Data updated successfully");
         // Lakukan tindakan setelah berhasil melakukan update
-        window.history.back(); // Kembali ke halaman sebelumnya
+        navigate("/Home"); // Kembali ke halaman /home
       })
       .catch((error) => {
         console.error("Error updating data: ", error);
@@ -158,10 +162,10 @@ const UpdateUsers = () => {
                     </select>
                   </div>
                   <div>
-                    <label htmlFor="salary" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="expected_salary" className="block text-sm font-medium text-gray-700">
                       Salary:
                     </label>
-                    <input type="text" id="salary" name="salary" value={formData.salary} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                    <input type="text" id="expected_salary" name="expected_salary" value={formData.expected_salary} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
                   </div>
                   <div>
                     <label htmlFor="short_profile" className="block text-sm font-medium text-gray-700">

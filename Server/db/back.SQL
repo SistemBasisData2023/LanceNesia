@@ -29,7 +29,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE FREELANCER (
-    user_id SERIAL PRIMARY KEY,
+    user_id BIGINT PRIMARY KEY,
     category category_enum,
     experience level_enum,
     expected_salary VARCHAR(20),

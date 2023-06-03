@@ -140,6 +140,28 @@ router.get("/getusers", (req, res) => {
   });
 });
 
+router.get("/getdatafreelance", (req, res) => {
+  const { user_id } = req.query;
+
+  // Query to retrieve data from the users and freelancer tables based on user_id
+  const query = `
+  SELECT *
+  FROM users
+  LEFT JOIN freelancer ON users.user_id = freelancer.user_id
+  WHERE users.user_id = $1  
+  `;
+
+  // Execute the query with the user_id parameter
+  db.query(query, [user_id], (error, results) => {
+    if (error) {
+      console.error("Error retrieving data:", error);
+      res.status(500).json({ error: "Error retrieving data" });
+    } else {
+      res.status(200).json(results.rows);
+    }
+  });
+});
+
 router.get("/getlistclient", (req, res) => {
   const query = "SELECT * FROM users WHERE role = 'client'"; // query ambil data
   // mendapatkan data dari database
@@ -215,6 +237,40 @@ router.post("/deleteprojects", (req, res) => {
 
     console.log("Data deleted successfully");
     res.end("done");
+  });
+});
+
+router.put("/updatedatafreelancer", (req, res) => {
+  const { user_id, name, username, phone, password, cpassword, age, domicile, short_profile, category, experience, expected_salary } = req.body;
+  console.log(req.body);
+  const updateUserQuery = `
+    UPDATE users
+    SET name = $2, username = $3, phone = $4, password = $5, cpassword = $6, age = $7, domicile = $8, short_profile = $9
+    WHERE user_id = $1
+  `;
+
+  const updateFreelancerQuery = `
+    INSERT INTO freelancer (user_id, category, experience, expected_salary)
+    VALUES ($1, $2, $3, $4)
+    ON CONFLICT (user_id) DO UPDATE
+    SET category = $2, experience = $3, expected_salary = $4
+  `;
+
+  db.query(updateUserQuery, [user_id, name, username, phone, password, cpassword, age, domicile, short_profile], (error, userResult) => {
+    if (error) {
+      console.error("Error updating user data:", error);
+      res.status(500).json({ error: "Error updating user data" });
+    } else {
+      db.query(updateFreelancerQuery, [user_id, category, experience, expected_salary], (error, freelancerResult) => {
+        if (error) {
+          console.log("user ID: ", user_id);
+          console.error("Error updating/inserting freelancer data:", error);
+          res.status(500).json({ error: "Error updating/inserting freelancer data" });
+        } else {
+          res.status(200).json({ message: "Data updated successfully" });
+        }
+      });
+    }
   });
 });
 
@@ -466,7 +522,7 @@ router.post("/getstatus", (req, res) => {
   console.log(username);
   console.log("fetching role");
 
-  const query = `SELECT role, name FROM users WHERE username = '${username}'`;
+  const query = `SELECT role, name, user_id FROM users WHERE username = '${username}'`;
   db.query(query, (err, results) => {
     if (err) {
       console.error("Error executing the data retrieval query: ", err);

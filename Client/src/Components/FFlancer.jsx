@@ -6,8 +6,7 @@ import styled from "styled-components";
 import Hero from "./Hero";
 import { useFreelancerContext } from "../context/freelancercontext";
 
-const FFHeroImg =
-  'url("https://images.unsplash.com/photo-1487528278747-ba99ed528ebc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80")';
+const FFHeroImg = 'url("https://ik.imagekit.io/abdfikih/back-view-brunette-woman-sitting-by-table-near-window.jpg?updatedAt=1685787280535")';
 
 const FFlancer = (curElem) => {
   const { isLoading, freelancer } = useFreelancerContext();
@@ -17,26 +16,11 @@ const FFlancer = (curElem) => {
 
   return (
     <>
-      <Hero
-        title="Find Freelancer"
-        desc="Want Your work done, We got your back!!"
-        img={FFHeroImg}
-        placeholder="Find FindFreelancer"
-      />
+      <Hero title="Find Freelancer" desc="Want Your work done, We got your back!!" img={FFHeroImg} placeholder="Find FindFreelancer" />
 
       <CardsHolder>
         {ProfileData.map((val) => {
-          return (
-            <ProfileCards
-              key={val.id}
-              proSpecial={val.proSpecial}
-              proTime={val.proTime}
-              proPrice={val.proPrice}
-              proImg={val.proImg}
-              proName={val.proName}
-              proStars={val.proStars}
-            />
-          );
+          return <ProfileCards key={val.id} proSpecial={val.proSpecial} proTime={val.proTime} proPrice={val.proPrice} proImg={val.proImg} proName={val.proName} proStars={val.proStars} />;
         })}
       </CardsHolder>
     </>

@@ -30,6 +30,7 @@ const Navbar = (props) => {
         console.log("User Role:", data[0].role);
         setUserRole(data[0].role);
         window.globalName = data[0].name;
+        window.globalUserId = data[0].user_id;
         console.log("User Name:", window.globalName);
       } catch (error) {
         console.log("Error fetching user role:", error);
@@ -85,7 +86,9 @@ const Navbar = (props) => {
   //* Navbar sticky on scroll
   window.addEventListener("scroll", function () {
     var navbar = document.querySelector("#navbar");
-    navbar.classList.toggle("sticky", window.scrollY > 0);
+    if (navbar) {
+      navbar.classList.toggle("sticky", window.scrollY > 0);
+    }
   });
 
   return (

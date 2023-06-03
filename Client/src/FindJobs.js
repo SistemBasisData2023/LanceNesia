@@ -11,7 +11,7 @@ import { FilterJobs } from "./context/jobcontext";
 import { FilterContextProvider } from "./context/filtercontext";
 import { UserContext } from "./Routing";
 
-const FJHeroImg = 'url("https://images.unsplash.com/photo-1498354178607-a79df2916198?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1888&q=80")';
+const FJHeroImg = 'url("https://ik.imagekit.io/abdfikih/happy-young-asian-businessmen-businesswomen-meeting-brainstorming-ideas-about-new-paperwork-project.jpg?updatedAt=1685787275136")';
 
 const FindJobs = () => {
   const navigate = useNavigate();

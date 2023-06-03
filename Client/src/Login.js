@@ -126,7 +126,9 @@ const Login = () => {
         console.log("User Role:", data[0].role);
         setUserRole(data[0].role);
         window.globalName = data[0].name;
+        window.globarUserId = data[0].user_id;
         console.log("User Name:", window.globalName);
+        console.log("User Id:", window.globarUserId);
 
         navigate("/Home");
       } catch (error) {
