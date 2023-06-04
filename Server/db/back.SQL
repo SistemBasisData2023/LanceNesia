@@ -54,11 +54,13 @@ CREATE TABLE CLIENT (
 
 CREATE TABLE PROJECT (
     project_id SERIAL PRIMARY KEY,
-    client_id SERIAL,
+    client_id BIGINT,
     project_name VARCHAR(50) NOT NULL,
     timeline VARCHAR(50) NOT NULL,
     job_description TEXT NOT NULL,
-    status status_enum NOT NULL,
+    status status_enum,
+    duration VARCHAR(20),
+    price VARCHAR(20),
     FOREIGN KEY (client_id) REFERENCES CLIENT(user_id)
 );
 

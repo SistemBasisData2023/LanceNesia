@@ -65,6 +65,7 @@
 
 import { createContext, useContext, useEffect, useReducer } from "react";
 import reducer from "../reducer/jobReducer";
+import axios from "axios";
 
 const JobContext = createContext();
 
@@ -87,34 +88,21 @@ const FilterJobs = ({ children }) => {
   const getJobs = async () => {
     dispatch({ type: "SET_LOADING" });
     try {
-      // Simulate an asynchronous operation with setTimeout
-      setTimeout(() => {
-        // Dummy data array
-        const dummyJobs = [
-          { id: 1, title: "Job 1", description: "Description 1", date: "2023-06-01" },
-          { id: 2, title: "Job 2", description: "Description 2", date: "2023-06-02" },
-          { id: 3, title: "Job 3", description: "Description 3", date: "2023-06-03" },
-        ];
-        dispatch({ type: "SET_API_DATA", payload: dummyJobs });
-      }, 1000);
+      const response = await axios.get("/getprojects"); // Mengambil data dari backend menggunakan URL "/getprojects"
+      const projects = response.data;
+      dispatch({ type: "SET_API_DATA", payload: projects });
     } catch (error) {
       dispatch({ type: "API_ERROR" });
     }
   };
 
   const getSingleJob = async (_id) => {
+    console.log("ID Project", _id);
     dispatch({ type: "SET_SINGLE_LOADING" });
     try {
-      // Simulate an asynchronous operation with setTimeout
-      setTimeout(() => {
-        const dummyJobs = [
-          { id: 1, title: "Job 1", description: "Description 1" },
-          { id: 2, title: "Job 2", description: "Description 2" },
-          { id: 3, title: "Job 3", description: "Description 3" },
-        ];
-        const singleJob = dummyJobs.find((job) => job.id === _id);
-        dispatch({ type: "SET_SINGLE_JOB", payload: singleJob });
-      }, 1000);
+      const response = await axios.get(`/getprojectsone?project_id=${_id}`); // Mengambil data proyek dengan ID tertentu dari backend
+      const singleJob = response.data;
+      dispatch({ type: "SET_SINGLE_JOB", payload: singleJob });
     } catch (error) {
       dispatch({ type: "SET_SINGLE_ERROR" });
     }

@@ -232,7 +232,7 @@ router.post("/deleteprojects", (req, res) => {
 
 //router 5: melakukan pemngambilan data dari database
 router.get("/getprojects", (req, res) => {
-  const query = "SELECT * FROM project"; // query ambil data
+  const query = "SELECT * FROM project WHERE client_id IS NULL"; // query ambil data proyek dengan client_id kosong
   // mendapatkan data dari database
   db.query(query, (err, results) => {
     if (err) {

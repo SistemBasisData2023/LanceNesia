@@ -3,8 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 const Cards = (curElem) => {
-  let { _id, category, title, date, duration, description, price, image } =
-    curElem;
+  let { project_id, category, project_name, timeline, duration, job_description, price, image } = curElem;
 
   const Wrapper = styled.section`
     .jobs {
@@ -33,9 +32,7 @@ const Cards = (curElem) => {
       text-align: center;
       margin: 10px 3px;
       border-radius: 10px;
-      box-shadow: 0px 0px 3.6px rgba(0, 0, 0, 0.017),
-        0px 0px 10px rgba(0, 0, 0, 0.025), 0px 0px 24.1px rgba(0, 0, 0, 0.033),
-        0px 0px 80px rgba(0, 0, 0, 0.05);
+      box-shadow: 0px 0px 3.6px rgba(0, 0, 0, 0.017), 0px 0px 10px rgba(0, 0, 0, 0.025), 0px 0px 24.1px rgba(0, 0, 0, 0.033), 0px 0px 80px rgba(0, 0, 0, 0.05);
     }
 
     .inside-jobs-li:hover {
@@ -77,18 +74,15 @@ const Cards = (curElem) => {
   return (
     <>
       <Wrapper>
-        <Link to={`/FindJobs/${_id}`}>
+        <Link to={`/FindJobs/${project_id}`}>
           <li className="inside-jobs-li">
             <div className="images-jobs">
-              <img
-                src={`https://source.unsplash.com/1600x900/?${title}`}
-                alt="Video"
-              />
+              <img src={`https://source.unsplash.com/1600x900/?${project_name}`} alt="Video" />
             </div>
             <div className="cate-content">
-              <div className="cate-title">{title}</div>
-              <div className="cate-foot">Posted on: {date}</div>
-              <div className="cate-body"> {description}</div>
+              <div className="cate-title">{project_name}</div>
+              <div className="cate-foot">Posted on: {timeline}</div>
+              <div className="cate-body"> {job_description}</div>
             </div>
           </li>
         </Link>
