@@ -141,7 +141,7 @@ const Navbar = (props) => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/Profile" id="nav-a">
+                  <NavLink to="/ProfileFreelance" id="nav-a">
                     Profile
                   </NavLink>
                 </li>
@@ -160,7 +160,7 @@ const Navbar = (props) => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/Profile" id="nav-a">
+                  <NavLink to="/ProfileClient" id="nav-a">
                     Profile
                   </NavLink>
                 </li>

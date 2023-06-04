@@ -162,6 +162,28 @@ router.get("/getdatafreelance", (req, res) => {
   });
 });
 
+router.get("/getdataclient", (req, res) => {
+  const { user_id } = req.query;
+
+  // Query to retrieve data from the users and freelancer tables based on user_id
+  const query = `
+  SELECT *
+  FROM users
+  LEFT JOIN client ON users.user_id = client.user_id
+  WHERE users.user_id = $1  
+  `;
+
+  // Execute the query with the user_id parameter
+  db.query(query, [user_id], (error, results) => {
+    if (error) {
+      console.error("Error retrieving data:", error);
+      res.status(500).json({ error: "Error retrieving data" });
+    } else {
+      res.status(200).json(results.rows);
+    }
+  });
+});
+
 router.get("/getlistclient", (req, res) => {
   const query = "SELECT * FROM users WHERE role = 'client'"; // query ambil data
   // mendapatkan data dari database
@@ -266,6 +288,40 @@ router.put("/updatedatafreelancer", (req, res) => {
           console.log("user ID: ", user_id);
           console.error("Error updating/inserting freelancer data:", error);
           res.status(500).json({ error: "Error updating/inserting freelancer data" });
+        } else {
+          res.status(200).json({ message: "Data updated successfully" });
+        }
+      });
+    }
+  });
+});
+
+router.put("/updatedataclient", (req, res) => {
+  const { user_id, name, username, phone, password, cpassword, age, domicile, short_profile, company_name } = req.body;
+  console.log(req.body);
+  const updateUserQuery = `
+    UPDATE users
+    SET name = $2, username = $3, phone = $4, password = $5, cpassword = $6, age = $7, domicile = $8, short_profile = $9
+    WHERE user_id = $1
+  `;
+
+  const updateClientQuery = `
+    INSERT INTO client (user_id, company_name)
+    VALUES ($1, $2)
+    ON CONFLICT (user_id) DO UPDATE
+    SET company_name = $2
+  `;
+
+  db.query(updateUserQuery, [user_id, name, username, phone, password, cpassword, age, domicile, short_profile], (error, userResult) => {
+    if (error) {
+      console.error("Error updating user data:", error);
+      res.status(500).json({ error: "Error updating user data" });
+    } else {
+      db.query(updateClientQuery, [user_id, company_name], (error, clientResult) => {
+        if (error) {
+          console.log("user ID: ", user_id);
+          console.error("Error updating/inserting client data:", error);
+          res.status(500).json({ error: "Error updating/inserting client data" });
         } else {
           res.status(200).json({ message: "Data updated successfully" });
         }

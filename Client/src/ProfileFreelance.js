@@ -6,7 +6,7 @@ import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import ParticlesBg from "particles-bg";
 
-const UpdateUsers = () => {
+const UpdateFreelance = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTableIndex, setActiveTableIndex] = useState(0);
   const navigate = useNavigate();
@@ -202,4 +202,4 @@ const UpdateUsers = () => {
   );
 };
 
-export default UpdateUsers;
+export default UpdateFreelance;
