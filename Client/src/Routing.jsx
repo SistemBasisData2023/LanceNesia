@@ -21,6 +21,7 @@ import UpdateReport from "./Components/Dashboard/UpdateReport";
 import UpdateProject from "./Components/Dashboard/UpdateProject";
 import UpdateFreelance from "./ProfileFreelance";
 import UpdateClient from "./ProfileClient";
+import ProfileHire from "./ProfileHire";
 
 // Context API
 export const UserContext = createContext();
@@ -52,6 +53,7 @@ const Paths = () => {
       <Route path="/FindJobs/Home" element={<App />}></Route>
       <Route path="/FindJobs/PostJobs" element={<PostJobs />}></Route>
       <Route path="/FindFreelancer" element={<FindFreelancer />}></Route>
+      <Route path="/FindFreelancer/:id" element={<ProfileHire />}></Route>
       <Route path="/FindFreelancer/Login" element={<Login />}></Route>
       <Route path="/FindFreelancer/Home" element={<App />}></Route>
       <Route path="/FindFreelancer/GetHired" element={<GetHired />}></Route>

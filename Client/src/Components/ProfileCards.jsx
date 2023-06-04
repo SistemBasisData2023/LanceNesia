@@ -1,33 +1,40 @@
 import React from "react";
 import styled from "styled-components";
-import { AiFillMessage, AiOutlineClockCircle } from "react-icons/ai";
+import { AiOutlineMail, AiOutlineTeam } from "react-icons/ai";
 import ProStars from "./ProStars";
-import FormatPrice from "../Helpers/FormatPrice";
+import { useNavigate } from "react-router-dom";
 
 const ProfileCards = (props) => {
+  const navigate = useNavigate();
+
+  const handleSeeProfileClick = (id) => {
+    // Navigate to the next page with the ID
+    navigate(`/FindFreelancer/${id}`);
+  };
+
+  const handleEmailButtonClick = () => {
+    const emailAddress = props.email; // Replace with the desired email address
+    const subject = "Recruitment Freelance"; // Replace with the desired email subject
+    const emailBody = "Hello, I am interested in discussing to you about our project."; // Replace with the desired email body
+
+    const emailLink = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+    window.open(emailLink, "_blank");
+  };
+
   return (
     <>
       <Wrapper>
-        <div
-          data-aos="fade-up"
-          data-duration="2000"
-          data-aos-offset="150"
-          data-aos-anchor-placement="top-bottom"
-          data-aos-easing="ease-in-out"
-          className="jobs"
-        >
+        <div data-aos="fade-up" data-duration="2000" data-aos-offset="150" data-aos-anchor-placement="top-bottom" data-aos-easing="ease-in-out" className="jobs">
           <div className="profile-cards">
             <div className="profile-content">
-              <div className="profile-speciality">{props.proSpecial}</div>
+              <div className="profile-speciality">{props.category}</div>
 
               <div className="time-price">
                 <div className="profile-time">
-                  <AiOutlineClockCircle className="icon" />
-                  {props.proTime}
+                  <AiOutlineTeam className="icon" />
+                  {props.experience}
                 </div>
-                <div className="profile-price">
-                  <FormatPrice price={parseInt(props.proPrice)} />
-                </div>
+                <div className="profile-price">IDR {props.salary}</div>
               </div>
 
               <div className="profile-img-name">
@@ -36,25 +43,23 @@ const ProfileCards = (props) => {
                 </div>
                 <div>
                   <div className="profile-name-stars">
-                    <div className="profile-name">{props.proName}</div>
+                    <div className="profile-name">{props.name}</div>
                     <div className="profile-stars">
                       <ProStars stars={props.proStars} />
                     </div>
                   </div>
 
                   <div className="profile-connection">
-                    <button>See Profile</button>
-                    <button>
-                      <AiFillMessage className="icon" />
+                    <button onClick={() => handleSeeProfileClick(props.id)}>See Profile</button>
+                    <button onClick={handleEmailButtonClick}>
+                      <AiOutlineMail className="icon" />
                     </button>
                   </div>
                 </div>
               </div>
 
               <div className="card-break"></div>
-              <div className="profile-reviews">
-                {props.proReviews} Customer Reviews
-              </div>
+              <div className="profile-reviews">{props.proReviews} Customer Reviews</div>
               <button className="profile-book">BOOK NOW</button>
             </div>
           </div>
@@ -74,9 +79,7 @@ const Wrapper = styled.section`
     padding: 5px 20px;
     margin: 10px 0px;
     border-radius: 20px 20px;
-    box-shadow: 0px 0px 3.6px rgba(0, 0, 0, 0.017),
-      0px 0px 10px rgba(0, 0, 0, 0.025), 0px 0px 24.1px rgba(0, 0, 0, 0.033),
-      0px 0px 80px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 0px 3.6px rgba(0, 0, 0, 0.017), 0px 0px 10px rgba(0, 0, 0, 0.025), 0px 0px 24.1px rgba(0, 0, 0, 0.033), 0px 0px 80px rgba(0, 0, 0, 0.05);
     transition: 150ms;
   }
 
@@ -202,11 +205,11 @@ const Wrapper = styled.section`
     border-radius: 20px 20px;
     border: none;
     color: white;
-    background-color: #019a50;
+    background-color: #1e90ff;
     font-family: "Roboto", "Sans Serif";
     font-size: 0.9rem;
     margin-bottom: 17px;
-    box-shadow: 5px 11px 30px #70cda0;
+    box-shadow: 5px 11px 30px #1e90ff;
     height: 34px;
   }
 

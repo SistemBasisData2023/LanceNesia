@@ -140,6 +140,26 @@ router.get("/getusers", (req, res) => {
   });
 });
 
+router.get("/getactivefreelance", (req, res) => {
+  // Query to retrieve data from the users and freelancer tables with conditions
+  const query = `
+  SELECT users.user_id, name, username, category, expected_salary, experience
+  FROM users
+  LEFT JOIN freelancer ON users.user_id = freelancer.user_id
+  WHERE users.role = 'freelancer' AND (users.status IS NULL OR users.status != 'Banned')
+  `;
+
+  // Execute the query
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error("Error retrieving data:", error);
+      res.status(500).json({ error: "Error retrieving data" });
+    } else {
+      res.status(200).json(results.rows);
+    }
+  });
+});
+
 router.get("/getdatafreelance", (req, res) => {
   const { user_id } = req.query;
 
