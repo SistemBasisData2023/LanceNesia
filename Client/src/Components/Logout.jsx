@@ -21,8 +21,7 @@ const Logout = () => {
       .then((res) => {
         dispatch({ type: "USER", payload: false });
         window.globalState = false;
-        navigate("/login");
-        window.globalName = " ";
+        navigate("/Login");
         if (!res.status === 200) {
           const error = new Error(res.error);
           throw error;
@@ -32,7 +31,7 @@ const Logout = () => {
         console.log(err);
       });
   });
-
+  window.globalName = " ";
   return <div>Logout</div>;
 };
 

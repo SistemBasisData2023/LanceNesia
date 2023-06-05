@@ -126,11 +126,21 @@ const Login = () => {
         console.log("User Role:", data[0].role);
         setUserRole(data[0].role);
         window.globalName = data[0].name;
-        window.globarUserId = data[0].user_id;
+        window.globalUserId = data[0].user_id;
+        window.globalStartId = data[0].user_id;
         console.log("User Name:", window.globalName);
         console.log("User Id:", window.globarUserId);
 
-        navigate("/Home");
+        // Menunda navigasi dengan setTimeout
+        setTimeout(() => {
+          if (data[0].role === "admin") {
+            navigate("/Home");
+          } else if (data[0].role === "freelancer") {
+            navigate("/ProfileFreelance");
+          } else {
+            navigate("/ProfileClient");
+          }
+        }, 1000); // Ubah angka 2000 menjadi waktu penundaan yang diinginkan (dalam milidetik)
       } catch (error) {
         console.log("Error fetching user role:", error);
       }

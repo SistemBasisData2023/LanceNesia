@@ -5,11 +5,18 @@ import { Container, Box, Grid, Card, CardActions, CardContent, Button, Typograph
 import SendIcon from "@mui/icons-material/Send";
 import ParticlesBg from "particles-bg";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate } from "react-router-dom";
 
 const SingleJob = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [jobData, setJobData] = useState(null);
+  const navigate = useNavigate();
+
+  const handleGoBack = (e) => {
+    e.preventDefault();
+    navigate(-1);
+  };
 
   useEffect(() => {
     const fetchJobData = async () => {
@@ -38,7 +45,7 @@ const SingleJob = () => {
         {loading && <div id="preloader">Loading...</div>}
 
         <Container maxWidth="md">
-          <a href="/FindJobs" className="fixed top-4 left-4 bg-blue-500 py-2 px-4 rounded-md flex items-center space-x-1 hover:bg-yellow-400 hover:text-yellow-900">
+          <a href="#" className="fixed top-4 left-4 bg-blue-500 py-2 px-4 rounded-md flex items-center space-x-1 hover:bg-yellow-400 hover:text-yellow-900" onClick={handleGoBack}>
             <ArrowBackIcon />
             <span>Back</span>
           </a>

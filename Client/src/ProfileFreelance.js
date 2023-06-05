@@ -5,11 +5,17 @@ import { EyeIcon, EyeSlashIcon as EyeOffIcon } from "@heroicons/react/24/solid";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import ParticlesBg from "particles-bg";
+import { Button, Dialog, DialogHeader, DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
+import { BellIcon } from "@heroicons/react/24/solid";
 
 const UpdateFreelance = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTableIndex, setActiveTableIndex] = useState(0);
   const navigate = useNavigate();
+
+  const [open, setOpen] = useState(true);
+
+  const handleOpen = () => setOpen(!open);
 
   const [formData, setFormData] = useState({
     user_id: window.globalUserId || "",
@@ -28,11 +34,13 @@ const UpdateFreelance = () => {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const backupId = window.globalUserId;
+
   useEffect(() => {
     // Lakukan permintaan GET untuk mendapatkan data pengguna
-    console.log("user Id: ", window.globalUserId);
+    console.log("user Id: ", backupId);
     axios
-      .get(`/getdatafreelance?user_id=${window.globalUserId}`)
+      .get(`/getdatafreelance?user_id=${backupId}`)
       .then((response) => {
         const userData = response.data[0]; // Mengambil data pertama dari array
         setFormData(userData);
@@ -196,6 +204,25 @@ const UpdateFreelance = () => {
           </div>
         </div>
         <Footer />
+        <Dialog open={open} handler={handleOpen} className="justify-center ml-4">
+          <DialogHeader>
+            <Typography variant="h5" color="blue-gray">
+              Your Attention is Required!
+            </Typography>
+          </DialogHeader>
+          <DialogBody divider className="grid place-items-center gap-4">
+            <BellIcon className="h-16 w-16 text-red-500" />
+            <Typography color="red" variant="h4">
+              You should read this!
+            </Typography>
+            <Typography className="text-center font-normal">Please Complete Your Profile For Enjoy All Features. Thank You</Typography>
+          </DialogBody>
+          <DialogFooter className="space-x-2">
+            <Button variant="text" color="green" onClick={handleOpen}>
+              Ok, Got it
+            </Button>
+          </DialogFooter>
+        </Dialog>
       </div>
       <ParticlesBg type="random" bg={true} params={{ color: "#FFF" }} />
     </>
