@@ -5,6 +5,7 @@ import { EyeIcon, EyeSlashIcon as EyeOffIcon } from "@heroicons/react/24/solid";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import ParticlesBg from "particles-bg";
+import ModalExample from "./Components/ModalExample";
 import { Button, Dialog, DialogHeader, DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
 import { BellIcon } from "@heroicons/react/24/solid";
 
@@ -204,25 +205,7 @@ const UpdateFreelance = () => {
           </div>
         </div>
         <Footer />
-        <Dialog open={open} handler={handleOpen} className="justify-center ml-4">
-          <DialogHeader>
-            <Typography variant="h5" color="blue-gray">
-              Your Attention is Required!
-            </Typography>
-          </DialogHeader>
-          <DialogBody divider className="grid place-items-center gap-4">
-            <BellIcon className="h-16 w-16 text-red-500" />
-            <Typography color="red" variant="h4">
-              You should read this!
-            </Typography>
-            <Typography className="text-center font-normal">Please Complete Your Profile For Enjoy All Features. Thank You</Typography>
-          </DialogBody>
-          <DialogFooter className="space-x-2">
-            <Button variant="text" color="green" onClick={handleOpen}>
-              Ok, Got it
-            </Button>
-          </DialogFooter>
-        </Dialog>
+        <ModalExample />
       </div>
       <ParticlesBg type="random" bg={true} params={{ color: "#FFF" }} />
     </>

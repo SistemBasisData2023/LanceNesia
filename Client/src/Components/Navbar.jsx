@@ -137,7 +137,7 @@ const Navbar = (props) => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/Dev" id="nav-a">
+                  <NavLink to="/ProjectFreelance" id="nav-a">
                     List Project
                   </NavLink>
                 </li>

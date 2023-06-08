@@ -23,6 +23,7 @@ import UpdateFreelance from "./ProfileFreelance";
 import UpdateClient from "./ProfileClient";
 import ProfileHire from "./ProfileHire";
 import ProjectClient from "./ProjectClient";
+import ProjectFreelancer from "./ProjectFreelancer";
 
 // Context API
 export const UserContext = createContext();
@@ -63,6 +64,7 @@ const Paths = () => {
       <Route path="/FindFreelancer/Logout" element={<Logout />}></Route>
       <Route path="/FindFreelancer/PostJobs" element={<PostJobs />}></Route>
       <Route path="/ProjectClient" element={<ProjectClient />}></Route>
+      <Route path="/ProjectFreelance" element={<ProjectFreelancer />}></Route>
       <Route path="/UpdateProject" element={<UpdateProject />}></Route>
       <Route path="/ProfileFreelance" element={<UpdateFreelance />}></Route>
       <Route path="/ProfileClient" element={<UpdateClient />}></Route>

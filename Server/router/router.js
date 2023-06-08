@@ -287,6 +287,30 @@ router.get("/getUsernameByProjectId", async (req, res) => {
   }
 });
 
+router.get("/getUsernameClient", async (req, res) => {
+  try {
+    const { project_id } = req.query;
+
+    // Menggunakan query SQL JOIN untuk mengambil freelancer_id dan nama pengguna (users.name)
+    const query = `
+    SELECT *
+    FROM PROJECT
+    RIGHT JOIN PROJECT_FREELANCER ON PROJECT.project_id = PROJECT_FREELANCER.project_id
+    JOIN CLIENT ON PROJECT.client_id = CLIENT.user_id
+    JOIN USERS ON CLIENT.user_id = USERS.user_id
+    WHERE freelancer_id = $1;
+    `;
+    const values = [req.query.freelancer_id];
+
+    const result = await db.query(query, values);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error executing query:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 router.post("/projectfreelancer", (req, res) => {
   const { project_id, freelancer_id } = req.body;
 
@@ -480,6 +504,20 @@ router.get("/getprojectsclient", (req, res) => {
     }
     res.json(results.rows); // Respond with the fetched data
   });
+});
+
+router.get("/getprojectsfreelancer", async (req, res) => {
+  try {
+    const freelancerId = req.query.freelancer_id;
+    const query = `SELECT * FROM PROJECT RIGHT JOIN PROJECT_FREELANCER ON PROJECT.project_id = PROJECT_FREELANCER.project_id WHERE freelancer_id= $1`;
+    const values = [freelancerId];
+
+    const { rows } = await db.query(query, values);
+    res.json(rows);
+  } catch (error) {
+    console.error("Error executing query", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 router.post("/deletereports", (req, res) => {

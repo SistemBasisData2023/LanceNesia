@@ -88,90 +88,99 @@ const UpdateProject = () => {
       <div className={className}>
         {window.globalRole === "Admin" && <Sidebar activeTable={activeTableIndex} handleTableClick={handleTableClick} className="mt-8" />}
         <div className="w-3/4 p-4 mt-20">
-          {/* Form Update */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+          <div className="bg-white shadow-md rounded-lg px-4 py-6">
+            <h2 className="text-2xl font-medium text-gray-900 capitalize items-center justify-center text-center">Update Project</h2>
+            {/* Form Update */}
+            <form onSubmit={handleSubmit} className="space-y-8">
               <div>
-                <label htmlFor="project_id" className="block text-sm font-medium text-gray-700">
-                  ID Project:
+                <label htmlFor="project_image" className="block text-sm font-medium text-gray-700 mt-8">
+                  Project Image (Generated Automatically from Project Name):
                 </label>
-                <input type="text" id="project_id" name="project_id" value={formData.project_id} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                <img src={`https://source.unsplash.com/1600x900/?${formData.project_name}`} alt="Project" className="mt-1 rounded-md" style={{ width: "300px", height: "200px" }} />
               </div>
-              {window.globalRole === "Admin" && (
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="client_id" className="block text-sm font-medium text-gray-700">
-                    ID Client:
+                  <label htmlFor="project_id" className="block text-sm font-medium text-gray-700">
+                    ID Project:
                   </label>
-                  <input type="text" id="client_id" name="client_id" value={formData.client_id} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                  <input type="text" id="project_id" name="project_id" value={formData.project_id} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
                 </div>
-              )}
+                {window.globalRole === "Admin" && (
+                  <div>
+                    <label htmlFor="client_id" className="block text-sm font-medium text-gray-700">
+                      ID Client:
+                    </label>
+                    <input type="text" id="client_id" name="client_id" value={formData.client_id} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                  </div>
+                )}
 
-              <div>
-                <label htmlFor="freelancer" className="block text-sm font-medium text-gray-700">
-                  Freelancer:
-                </label>
-                <input type="text" id="freelancer" name="freelancer" value={window.globalFreelancerName} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                <div>
+                  <label htmlFor="freelancer" className="block text-sm font-medium text-gray-700">
+                    Freelancer:
+                  </label>
+                  <input type="text" id="freelancer" name="freelancer" value={window.globalFreelancerName} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                </div>
+
+                <div>
+                  <label htmlFor="project_name" className="block text-sm font-medium text-gray-700">
+                    Project Name:
+                  </label>
+                  <input type="text" id="project_name" name="project_name" value={formData.project_name} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                </div>
+
+                <div>
+                  <label htmlFor="timeline" className="block text-sm font-medium text-gray-700">
+                    Timeline:
+                  </label>
+                  <input type="text" id="timeline" name="timeline" value={formData.timeline} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                </div>
+
+                <div>
+                  <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
+                    Duration:
+                  </label>
+                  <input type="text" id="duration" name="duration" value={formData.duration} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                </div>
+
+                <div>
+                  <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+                    Price:
+                  </label>
+                  <input type="text" id="price" name="price" value={formData.price} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                </div>
+
+                <div>
+                  <label htmlFor="job_description" className="block text-sm font-medium text-gray-700">
+                    Job Descriptions:
+                  </label>
+                  <textarea id="job_description" name="job_description" value={formData.job_description} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                </div>
+
+                <div>
+                  <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+                    Status:
+                  </label>
+                  <select id="status" name="status" value={formData.status} onChange={handleChange} disabled className="mt-1 p-2 border border-gray-300 rounded-md w-full">
+                    <option value="">Select Status</option>
+                    <option value="ACCEPTED">PENDING</option>
+                    <option value="PENDING">DENIED</option>
+                    <option value="REJECTED">ACCEPTED</option>
+                    <option value="NOT STARTED">NOT STARTED</option>
+                    <option value="25%">25%</option>
+                    <option value="50%">50%</option>
+                    <option value="75%">75%</option>
+                    <option value="DONE">DONE</option>
+                  </select>
+                </div>
               </div>
 
               <div>
-                <label htmlFor="project_name" className="block text-sm font-medium text-gray-700">
-                  Project Name:
-                </label>
-                <input type="text" id="project_name" name="project_name" value={formData.project_name} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                <button type="submit" className="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                  Update
+                </button>
               </div>
-
-              <div>
-                <label htmlFor="timeline" className="block text-sm font-medium text-gray-700">
-                  Timeline:
-                </label>
-                <input type="text" id="timeline" name="timeline" value={formData.timeline} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
-              </div>
-
-              <div>
-                <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
-                  Duration:
-                </label>
-                <input type="text" id="duration" name="duration" value={formData.duration} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
-              </div>
-
-              <div>
-                <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-                  Price:
-                </label>
-                <input type="text" id="price" name="price" value={formData.price} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
-              </div>
-
-              <div>
-                <label htmlFor="job_description" className="block text-sm font-medium text-gray-700">
-                  Job Descriptions:
-                </label>
-                <textarea id="job_description" name="job_description" value={formData.job_description} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
-              </div>
-
-              <div>
-                <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-                  Status:
-                </label>
-                <select id="status" name="status" value={formData.status} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full">
-                  <option value="">Select Status</option>
-                  <option value="ACCEPTED">PENDING</option>
-                  <option value="PENDING">DENIED</option>
-                  <option value="REJECTED">ACCEPTED</option>
-                  <option value="NOT STARTED">NOT STARTED</option>
-                  <option value="25%">25%</option>
-                  <option value="50%">50%</option>
-                  <option value="75%">75%</option>
-                  <option value="DONE">DONE</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <button type="submit" className="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                Update
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
       <Footer />

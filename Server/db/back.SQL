@@ -74,7 +74,8 @@ CREATE TABLE PROJECT_FREELANCER (
 
 CREATE TABLE REPORT (
     report_id SERIAL PRIMARY KEY,
-    reporter_id SERIAL,
+    reporter_id BIGINT,
+    username VARCHAR(50),
     message TEXT NOT NULL,
     status report_status DEFAULT 'PENDING',
     FOREIGN KEY (reporter_id) REFERENCES USERS(user_id)
@@ -124,5 +125,5 @@ ALTER TABLE users
   ALTER COLUMN username SET NOT NULL,
   ADD CONSTRAINT unique_username UNIQUE (username);
 
-ALTER TABLE freelancer
-ADD COLUMN expected_salary VARCHAR(20);
+ALTER TABLE REPORT
+ADD COLUMN reporter_id TYPE BIGINT,;
