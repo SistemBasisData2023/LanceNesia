@@ -17,6 +17,8 @@ const UpdateProject = () => {
     timeline: "",
     job_description: "",
     status: "",
+    duration: "",
+    price: "",
   });
 
   useEffect(() => {
@@ -45,6 +47,7 @@ const UpdateProject = () => {
   };
 
   const handleSubmit = (e) => {
+    console.log("Submitting data...");
     e.preventDefault();
     // Kirim data update ke backend
     axios
@@ -71,11 +74,19 @@ const UpdateProject = () => {
     setActiveTableIndex(table);
   };
 
+  let className = "flex";
+
+  console.log("Rolenya ada :", window.globalRole);
+
+  if (window.globalRole === "client") {
+    className += " justify-center items-center";
+  }
+
   return (
     <div>
       <Navbar />
-      <div className="flex">
-        <Sidebar activeTable={activeTableIndex} handleTableClick={handleTableClick} className="mt-8" />
+      <div className={className}>
+        {window.globalRole === "Admin" && <Sidebar activeTable={activeTableIndex} handleTableClick={handleTableClick} className="mt-8" />}
         <div className="w-3/4 p-4 mt-20">
           {/* Form Update */}
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -86,12 +97,20 @@ const UpdateProject = () => {
                 </label>
                 <input type="text" id="project_id" name="project_id" value={formData.project_id} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
               </div>
+              {window.globalRole === "Admin" && (
+                <div>
+                  <label htmlFor="client_id" className="block text-sm font-medium text-gray-700">
+                    ID Client:
+                  </label>
+                  <input type="text" id="client_id" name="client_id" value={formData.client_id} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                </div>
+              )}
 
               <div>
-                <label htmlFor="client_id" className="block text-sm font-medium text-gray-700">
-                  ID Client:
+                <label htmlFor="freelancer" className="block text-sm font-medium text-gray-700">
+                  Freelancer:
                 </label>
-                <input type="text" id="client_id" name="client_id" value={formData.client_id} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                <input type="text" id="freelancer" name="freelancer" value={window.globalFreelancerName} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
               </div>
 
               <div>
@@ -106,6 +125,20 @@ const UpdateProject = () => {
                   Timeline:
                 </label>
                 <input type="text" id="timeline" name="timeline" value={formData.timeline} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+              </div>
+
+              <div>
+                <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
+                  Duration:
+                </label>
+                <input type="text" id="duration" name="duration" value={formData.duration} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+              </div>
+
+              <div>
+                <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+                  Price:
+                </label>
+                <input type="text" id="price" name="price" value={formData.price} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
               </div>
 
               <div>

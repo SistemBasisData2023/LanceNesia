@@ -30,6 +30,7 @@ const Navbar = (props) => {
         console.log("User Role:", data[0].role);
         setUserRole(data[0].role);
         window.globalName = data[0].name;
+        window.globalRole = data[0].role;
         window.globalUserId = data[0].user_id;
         console.log("User Name:", window.globalName);
       } catch (error) {
@@ -155,7 +156,7 @@ const Navbar = (props) => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/Dev" id="nav-a">
+                  <NavLink to="/ProjectClient" id="nav-a">
                     Projects
                   </NavLink>
                 </li>

@@ -60,7 +60,7 @@ const ProfileCards = (props) => {
 
               <div className="card-break"></div>
               <div className="profile-reviews">{props.proReviews} Customer Reviews</div>
-              <button className="profile-book">BOOK NOW</button>
+              <button className="profile-book">HIRE NOW</button>
             </div>
           </div>
         </div>

@@ -36,6 +36,7 @@ const ListReport = () => {
       const transformedData = data.map((report) => ({
         report_id: report.report_id,
         reporter_id: report.reporter_id,
+        username_report: report.username_report,
         message: report.message,
         status: report.status,
       }));
@@ -117,6 +118,7 @@ const ListReport = () => {
                       <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">No</th>
                       <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">ID Report</th>
                       <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">ID Sender</th>
+                      <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">Username</th>
                       <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">Message</th>
                       <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">Status</th>
                       <th className="px-6 py-3 bg-gray-100 text-left font-semibold text-sm uppercase border-b">Actions</th>
@@ -128,6 +130,7 @@ const ListReport = () => {
                         <td className="px-6 py-4 whitespace-nowrap">{indexOfFirstReport + index + 1}</td>
                         <td className="px-6 py-4 whitespace-nowrap">{report.report_id} </td>
                         <td className="px-6 py-4 whitespace-nowrap">{report.reporter_id}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{report.username_report}</td>
                         <td className="px-6 py-4 whitespace-nowrap">{report.message}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span

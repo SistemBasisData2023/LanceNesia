@@ -30,6 +30,7 @@ const Navbar = (props) => {
         console.log("User Role:", data[0].role);
         setUserRole(data[0].role);
         window.globalName = data[0].name;
+        window.globalRole = data[0].role;
         dispatch(window.globalState);
         console.log("User Name:", window.globalName);
       } catch (error) {
@@ -133,6 +134,16 @@ const Navbar = (props) => {
                     Find Project
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink to="/Dev" id="nav-a">
+                    List Project
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/ProfileFreelance" id="nav-a">
+                    Profile
+                  </NavLink>
+                </li>
               </>
             )}
             {state && userRole === "client" && (
@@ -140,6 +151,16 @@ const Navbar = (props) => {
                 <li>
                   <NavLink to="/FindFreelancer" id="nav-a">
                     Find Freelancers
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/ProjectClient" id="nav-a">
+                    Projects
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/ProfileClient" id="nav-a">
+                    Profile
                   </NavLink>
                 </li>
               </>
@@ -153,11 +174,6 @@ const Navbar = (props) => {
                 </li>
               </>
             )}
-            <li>
-              <NavLink to="/Profile" id="nav-a">
-                Profile
-              </NavLink>
-            </li>
           </ul>
           <RenderMenu />
         </nav>

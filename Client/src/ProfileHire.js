@@ -10,6 +10,8 @@ import { useParams } from "react-router-dom";
 const ProfileHire = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+
   const { id } = useParams(); // Get the user_id from the URL path
 
   console.log("User ID: ", id);
@@ -27,6 +29,9 @@ const ProfileHire = () => {
     expected_salary: "",
   });
 
+  const [projects, setProjects] = useState([]);
+  const [selectedProject, setSelectedProject] = useState("");
+
   useEffect(() => {
     // Perform a GET request to retrieve user data
     console.log("user Id: ", id);
@@ -42,7 +47,41 @@ const ProfileHire = () => {
         console.error("Error fetching user data: ", error);
         setIsLoading(false);
       });
+
+    // Perform a GET request to retrieve projects data
+    axios
+      .get(`/getprojectsclient?client_id=${window.globalUserId}`)
+      .then((response) => {
+        const projectsData = response.data;
+        setProjects(projectsData);
+        console.log("Projects data:", projectsData);
+      })
+      .catch((error) => {
+        console.error("Error fetching projects data: ", error);
+      });
   }, [id]);
+
+  const handleHire = () => {
+    const freelancerId = id; // Ganti dengan id freelancer yang ingin dihire
+    console.log("Freelancer ID HIRE: ", freelancerId);
+    console.log("Project ID HIRE: ", selectedProject);
+    const data = {
+      project_id: selectedProject,
+      freelancer_id: freelancerId,
+    };
+
+    axios
+      .post("/projectfreelancer", data)
+      .then((response) => {
+        console.log("Data inserted successfully");
+        // Lakukan tindakan lain setelah data berhasil diinsert
+        navigate("/Home"); // Kembali ke halaman /home
+      })
+      .catch((error) => {
+        console.error("Error executing the INSERT query:", error);
+        // Lakukan tindakan lain jika terjadi kesalahan
+      });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -76,6 +115,18 @@ const ProfileHire = () => {
       setIsLoading(false);
     }, 500);
   }
+
+  const handleProjectChange = (e) => {
+    setSelectedProject(e.target.value);
+  };
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -165,14 +216,58 @@ const ProfileHire = () => {
                     </label>
                     <input type="text" id="short_profile" name="short_profile" value={formData.short_profile} onChange={handleChange} readOnly className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
                   </div>
+                  <div className="flex">
+                    <button
+                      type="button"
+                      onClick={handleModalOpen}
+                      className=" mt-8 px-8 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 items-center justify-center"
+                    >
+                      Hire
+                    </button>
+                  </div>
                 </div>
-                <button type="submit" className="ml-96 py-2 px-16 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 items-center justify-center">
-                  Hire
-                </button>
               </form>
             </div>
           </div>
         </div>
+        {/* Modal */}
+        {isModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            {/* Dark transparent background */}
+            <div className="fixed inset-0 bg-black opacity-50" onClick={handleModalClose}></div>
+
+            <div className="bg-white w-1/2 rounded-lg p-8 relative z-10">
+              <h2 className="text-xl font-semibold mb-4">Hire Freelancer</h2>
+
+              {/* Dropdown */}
+              <div className="mb-4">
+                <label htmlFor="projectType" className="block text-sm font-medium text-gray-700">
+                  Hiring For Project:
+                </label>
+                <select id="projectType" name="projectType" value={selectedProject} onChange={handleProjectChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full">
+                  <option value="">Select Project</option>
+                  {projects.map((project) => (
+                    <option key={project.project_id} value={project.project_id}>
+                      {project.project_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Add other modal content here */}
+              {/* For example, you can have more input fields or additional dropdowns */}
+
+              <div className="flex justify-end">
+                <button onClick={handleModalClose} className="py-2 px-4 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+                  Close
+                </button>
+                <button onClick={handleHire} className="py-2 px-4 ml-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                  Hire
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         <Footer />
       </div>
       <ParticlesBg type="random" bg={true} params={{ color: "#FFF" }} />

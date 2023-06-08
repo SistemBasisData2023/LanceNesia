@@ -25,7 +25,7 @@ CREATE TABLE users (
     domicile VARCHAR(30) ,
     short_profile TEXT,
     role role_enum,
-    access access_enum
+    status access_enum
 );
 
 CREATE TABLE FREELANCER (
@@ -47,7 +47,7 @@ CREATE TABLE FREELANCER_EXPERIENCE (
 );
 
 CREATE TABLE CLIENT (
-    user_id SERIAL PRIMARY KEY,
+    user_id BIGINT PRIMARY KEY,
     company_name VARCHAR(50) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES USERS(user_id)
 );
@@ -66,8 +66,8 @@ CREATE TABLE PROJECT (
 
 CREATE TABLE PROJECT_FREELANCER (
     project_freelancer_id SERIAL PRIMARY KEY,
-    project_id SERIAL,
-    freelancer_id SERIAL,
+    project_id BIGINT,
+    freelancer_id BIGINT,
     FOREIGN KEY (project_id) REFERENCES PROJECT(project_id),
     FOREIGN KEY (freelancer_id) REFERENCES FREELANCER(user_id)
 );
@@ -98,10 +98,7 @@ INSERT INTO CLIENT (company_name) VALUES ('Company A'), ('Company B');
 
 INSERT INTO PROJECT (client_id, project_name, timeline, job_description, status)
 VALUES 
-    (1, 'Project A', '2023-01-01', 'Job description for Project A', 'PENDING'),
-    (1, 'Project B', '2023-02-01', 'Job description for Project B', 'PENDING'),
-    (2, 'Project C', '2023-03-01', 'Job description for Project C', 'PENDING'),
-    (2, 'Project D', '2023-04-01', 'Job description for Project D', 'PENDING');
+    (11, 'Tester Project', '2023-04-01', 'Job description for Tester Project', 'PENDING');
 
 INSERT INTO PROJECT_FREELANCER (project_id, freelancer_id)
 VALUES 

@@ -14,6 +14,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import CateCards from "./Components/CateCards.jsx";
 import { UserContext } from "./Routing";
+import Report from "./Components/Report.jsx";
 
 const App = () => {
   // eslint-disable-next-line no-unused-vars
@@ -338,6 +339,7 @@ const App = () => {
         {/* //? ------------------------------------------------------------------------------ */}
 
         <Footer />
+        <Report />
       </>
     )
   );

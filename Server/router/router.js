@@ -67,6 +67,7 @@ router.post("/register", (req, res) => {
   const domicile = " ";
   const short_profile = " ";
   const role = req.body.role;
+  const status = "Active";
 
   // Hash password using bcrypt
   bcrypt.hash(password, 10, (err, hash) => {
@@ -78,7 +79,7 @@ router.post("/register", (req, res) => {
 
     // Insert new user into the database
     db.query(
-      `INSERT INTO users (name, username, phone, password, cpassword, age, domicile, short_profile, role) VALUES ('${name}', '${username}', '${phone}','${hash}', '${password}', '${age}', '${domicile}', '${short_profile}', '${role}' )`,
+      `INSERT INTO users (name, username, phone, password, cpassword, age, domicile, short_profile, role, status) VALUES ('${name}', '${username}', '${phone}','${hash}', '${password}', '${age}', '${domicile}', '${short_profile}', '${role}', '${status}' )`,
       (err, result) => {
         if (err) {
           console.error("Error inserting new user:", err);
@@ -264,6 +265,57 @@ router.get("/getprojects", (req, res) => {
   });
 });
 
+router.get("/getUsernameByProjectId", async (req, res) => {
+  try {
+    const { project_id } = req.query;
+
+    // Menggunakan query SQL JOIN untuk mengambil freelancer_id dan nama pengguna (users.name)
+    const query = `
+      SELECT users.name
+      FROM PROJECT_FREELANCER
+      JOIN users ON PROJECT_FREELANCER.freelancer_id = users.user_id
+      WHERE PROJECT_FREELANCER.project_id = $1
+    `;
+    const values = [project_id];
+
+    const result = await db.query(query, values);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error executing query:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.post("/projectfreelancer", (req, res) => {
+  const { project_id, freelancer_id } = req.body;
+
+  const checkQuery = "SELECT * FROM project_freelancer WHERE project_id = $1 AND freelancer_id = $2";
+  db.query(checkQuery, [project_id, freelancer_id], (checkErr, checkResult) => {
+    if (checkErr) {
+      console.error("Error executing the SELECT query: ", checkErr);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+
+    if (checkResult.rows.length > 0) {
+      res.status(400).send("Data already exists");
+      return;
+    }
+
+    const insertQuery = "INSERT INTO project_freelancer (project_id, freelancer_id) VALUES ($1, $2)";
+    db.query(insertQuery, [project_id, freelancer_id], (insertErr, insertResult) => {
+      if (insertErr) {
+        console.error("Error executing the INSERT query: ", insertErr);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      res.status(201).send("Data inserted successfully");
+    });
+  });
+});
+
 router.post("/deleteprojects", (req, res) => {
   const project_id = req.body.project_id; // ID data yang akan dihapus
   console.log(project_id);
@@ -353,19 +405,21 @@ router.put("/updatedataclient", (req, res) => {
 router.put("/updateprojects/:project_id", (req, res) => {
   console.log("Update project with id: ", req.params.project_id);
   const project_id = req.params.project_id;
-  const { project_name, timeline, job_description, status } = req.body;
+  const { project_name, timeline, job_description, status, duration, price } = req.body;
 
   const query = `
       UPDATE project 
       SET project_name = $1, 
           timeline = $2, 
           job_description = $3,  
-          status = $4
-      WHERE project_id = $5
+          status = $4,
+          duration = $5,
+          price = $6
+      WHERE project_id = $7
       RETURNING *
     `;
 
-  const values = [project_name, timeline, job_description, status, project_id];
+  const values = [project_name, timeline, job_description, status, duration, price, project_id];
 
   db.query(query, values, (err, results) => {
     if (err) {
@@ -411,6 +465,23 @@ router.get("/getprojectsone", (req, res) => {
   });
 });
 
+router.get("/getprojectsclient", (req, res) => {
+  const client_id = req.query.client_id; // Menggunakan req.query untuk mendapatkan query parameter
+  console.log("projectID", client_id);
+  const query = `SELECT * FROM project WHERE client_id = $1`; // Menggunakan parameterized query
+  const values = [client_id];
+
+  // mendapatkan data dari database
+  db.query(query, values, (err, results) => {
+    if (err) {
+      console.error("Error executing the data retrieval query: ", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    res.json(results.rows); // Respond with the fetched data
+  });
+});
+
 router.post("/deletereports", (req, res) => {
   const report_id = req.body.report_id; // ID data yang akan dihapus
   console.log(report_id);
@@ -444,6 +515,49 @@ router.get("/getreportsone", (req, res) => {
     }
     res.json(results.rows); // Respond with the fetched data
   });
+});
+
+router.post("/makeprojects", async (req, res) => {
+  try {
+    const { client_id, project_name, timeline, job_description, duration, price } = req.body;
+
+    // Query untuk menyimpan data proyek baru ke database
+    const query = `
+      INSERT INTO PROJECT (client_id, project_name, timeline, job_description, duration, price)
+      VALUES ($1, $2, $3, $4, $5, $6)
+    `;
+    const values = [client_id, project_name, timeline, job_description, duration, price];
+
+    // Jalankan query menggunakan koneksi pool
+    const result = await db.query(query, values);
+
+    res.status(201).json(result.rows[0]); // Mengembalikan data proyek yang berhasil ditambahkan
+  } catch (error) {
+    console.error("Error while inserting project:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Handler untuk route POST /reports
+router.post("/makereport", async (req, res) => {
+  try {
+    const { username_report, message } = req.body;
+
+    // Cek apakah username_report ada dalam tabel users
+    const userQuery = "SELECT user_id FROM users WHERE username = $1";
+    const userResult = await db.query(userQuery, [username_report]);
+
+    const reporterId = userResult.rows[0].user_id;
+
+    // Simpan laporan ke tabel reports
+    const reportQuery = "INSERT INTO report (reporter_id, username_report, message) VALUES ($1, $2, $3)";
+    await db.query(reportQuery, [reporterId, username_report, message]);
+
+    return res.status(200).json({ message: "Report created successfully" });
+  } catch (error) {
+    console.error("Error creating report:", error);
+    return res.status(500).json({ error: "An error occurred" });
+  }
 });
 
 router.put("/updatereports/:report_id", (req, res) => {
