@@ -15,10 +15,12 @@ import "swiper/css/navigation";
 import CateCards from "./Components/CateCards.jsx";
 import { UserContext } from "./Routing";
 import Report from "./Components/Report.jsx";
+import { useNavigate } from "react-router-dom";
 
 const App = () => {
   // eslint-disable-next-line no-unused-vars
   const { state, dispatch } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
   const preloader = document.getElementById("preloader");

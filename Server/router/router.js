@@ -144,10 +144,10 @@ router.get("/getusers", (req, res) => {
 router.get("/getactivefreelance", (req, res) => {
   // Query to retrieve data from the users and freelancer tables with conditions
   const query = `
-  SELECT users.user_id, name, username, category, expected_salary, experience
+  SELECT users.user_id, name, username, category, expected_salary, experience, rating, image_url
   FROM users
   LEFT JOIN freelancer ON users.user_id = freelancer.user_id
-  WHERE users.role = 'freelancer' AND (users.status IS NULL OR users.status != 'Banned')
+  WHERE users.role = 'freelancer' AND (users.status IS NULL OR users.status != 'Banned') AND freelancer.user_id IS NOT NULL
   `;
 
   // Execute the query
@@ -253,7 +253,22 @@ router.post("/deleteprojects", (req, res) => {
 
 //router 5: melakukan pemngambilan data dari database
 router.get("/getprojects", (req, res) => {
-  const query = "SELECT * FROM project WHERE client_id IS NULL"; // query ambil data proyek dengan client_id kosong
+  const query = "SELECT * FROM project"; // query ambil data proyek dengan client_id kosong
+  // mendapatkan data dari database
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error executing the data retrieval query: ", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    res.json(results.rows); // Respond with the fetched data
+  });
+});
+
+router.get("/getprojectsfree", (req, res) => {
+  const query = "SELECT * FROM project WHERE project_id IS NULL OR status = 'DENIED' OR project_id NOT IN (SELECT project_id FROM project_freelancer)";
+  // query ambil data proyek dengan client_id kosong atau tidak ada di project_freelance
+
   // mendapatkan data dari database
   db.query(query, (err, results) => {
     if (err) {
@@ -271,10 +286,10 @@ router.get("/getUsernameByProjectId", async (req, res) => {
 
     // Menggunakan query SQL JOIN untuk mengambil freelancer_id dan nama pengguna (users.name)
     const query = `
-      SELECT users.name
-      FROM PROJECT_FREELANCER
-      JOIN users ON PROJECT_FREELANCER.freelancer_id = users.user_id
-      WHERE PROJECT_FREELANCER.project_id = $1
+    SELECT name, freelancer_id
+    FROM PROJECT_FREELANCER
+    JOIN users ON PROJECT_FREELANCER.freelancer_id = users.user_id
+    WHERE PROJECT_FREELANCER.project_id = $1
     `;
     const values = [project_id];
 
@@ -335,35 +350,54 @@ router.post("/projectfreelancer", (req, res) => {
         return;
       }
 
-      res.status(201).send("Data inserted successfully");
+      const updateQuery = "UPDATE project SET status = 'PENDING' WHERE project_id = $1";
+      db.query(updateQuery, [project_id], (updateErr, updateResult) => {
+        if (updateErr) {
+          console.error("Error executing the UPDATE query: ", updateErr);
+          res.status(500).send("Internal Server Error");
+          return;
+        }
+
+        res.status(201).send("Data inserted successfully");
+      });
     });
   });
 });
 
-router.post("/deleteprojects", (req, res) => {
+router.post("/deleteprojectsfreelance", (req, res) => {
   const project_id = req.body.project_id; // ID data yang akan dihapus
-  console.log(project_id);
-  const query = `DELETE FROM project WHERE project_id = '${project_id}'`; // query hapus data
+  const freelance_id = req.body.freelance_id; // ID freelancer yang sesuai
 
-  //menghapus data_gaming berdasarkan id
-  db.query(query, (err, results) => {
+  const deleteQuery = `DELETE FROM project_freelancer WHERE project_id = '${project_id}' AND freelancer_id = '${freelance_id}'`; // query hapus data
+
+  const updateQuery = `UPDATE project SET status = 'PENDING' WHERE project_id = '${project_id}'`; // query update status
+
+  db.query(deleteQuery, (err, deleteResult) => {
     if (err) {
       console.error("Error executing the delete query: ", err);
       res.status(500).send("Internal Server Error");
       return;
     }
 
-    console.log("Data deleted successfully");
-    res.end("done");
+    db.query(updateQuery, (err, updateResult) => {
+      if (err) {
+        console.error("Error executing the update query: ", err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      console.log("Data deleted successfully");
+      res.end("done");
+    });
   });
 });
 
 router.put("/updatedatafreelancer", (req, res) => {
-  const { user_id, name, username, phone, password, cpassword, age, domicile, short_profile, category, experience, expected_salary } = req.body;
+  const { user_id, name, username, phone, password, cpassword, age, domicile, short_profile, category, experience, expected_salary, image_url } = req.body;
   console.log(req.body);
   const updateUserQuery = `
     UPDATE users
-    SET name = $2, username = $3, phone = $4, password = $5, cpassword = $6, age = $7, domicile = $8, short_profile = $9
+    SET name = $2, username = $3, phone = $4, password = $5, cpassword = $6, age = $7, domicile = $8, short_profile = $9, image_url = $10
     WHERE user_id = $1
   `;
 
@@ -374,7 +408,7 @@ router.put("/updatedatafreelancer", (req, res) => {
     SET category = $2, experience = $3, expected_salary = $4
   `;
 
-  db.query(updateUserQuery, [user_id, name, username, phone, password, cpassword, age, domicile, short_profile], (error, userResult) => {
+  db.query(updateUserQuery, [user_id, name, username, phone, password, cpassword, age, domicile, short_profile, image_url], (error, userResult) => {
     if (error) {
       console.error("Error updating user data:", error);
       res.status(500).json({ error: "Error updating user data" });
@@ -392,12 +426,35 @@ router.put("/updatedatafreelancer", (req, res) => {
   });
 });
 
+router.put("/updateTotalRating", (req, res) => {
+  const { rated, user_id } = req.body;
+  console.log(req.body);
+  const query = `
+  UPDATE freelancer
+  SET temporary_rate = temporary_rate + $1,
+      total_rating = total_rating + 1,
+      rating = CAST(((temporary_rate + $1) / (total_rating + 1)) AS NUMERIC(10, 1))
+  WHERE user_id = $2`;
+
+  const values = [rated, user_id];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error executing the update query: ", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    console.log("Total rating updated successfully");
+    res.send("Total rating updated successfully");
+  });
+});
+
 router.put("/updatedataclient", (req, res) => {
-  const { user_id, name, username, phone, password, cpassword, age, domicile, short_profile, company_name } = req.body;
+  const { user_id, name, username, phone, password, cpassword, age, domicile, short_profile, company_name, image_url } = req.body;
   console.log(req.body);
   const updateUserQuery = `
     UPDATE users
-    SET name = $2, username = $3, phone = $4, password = $5, cpassword = $6, age = $7, domicile = $8, short_profile = $9
+    SET name = $2, username = $3, phone = $4, password = $5, cpassword = $6, age = $7, domicile = $8, short_profile = $9, image_url = $10
     WHERE user_id = $1
   `;
 
@@ -408,7 +465,7 @@ router.put("/updatedataclient", (req, res) => {
     SET company_name = $2
   `;
 
-  db.query(updateUserQuery, [user_id, name, username, phone, password, cpassword, age, domicile, short_profile], (error, userResult) => {
+  db.query(updateUserQuery, [user_id, name, username, phone, password, cpassword, age, domicile, short_profile, image_url], (error, userResult) => {
     if (error) {
       console.error("Error updating user data:", error);
       res.status(500).json({ error: "Error updating user data" });
@@ -475,7 +532,11 @@ router.get("/getreports", (req, res) => {
 router.get("/getprojectsone", (req, res) => {
   const project_id = req.query.project_id; // Menggunakan req.query untuk mendapatkan query parameter
   console.log("projectID", project_id);
-  const query = `SELECT * FROM project WHERE project_id = $1`; // Menggunakan parameterized query
+  const query = `
+  SELECT project.*, client.*
+  FROM project
+  LEFT JOIN client ON project.client_id = client.user_id
+  WHERE project.project_id = $1`; // Menggunakan parameterized query
   const values = [project_id];
 
   // mendapatkan data dari database
@@ -503,6 +564,26 @@ router.get("/getprojectsclient", (req, res) => {
       return;
     }
     res.json(results.rows); // Respond with the fetched data
+  });
+});
+
+router.get("/getprojectshire", (req, res) => {
+  const client_id = req.query.client_id;
+  console.log("client_id", client_id);
+  const query = `
+    SELECT project.*, project_freelancer.*
+    FROM project
+    LEFT JOIN project_freelancer ON project.project_id = project_freelancer.project_id
+    WHERE project.client_id = $1 AND project_freelancer.freelancer_id IS NULL`;
+  const values = [client_id];
+
+  db.query(query, values, (err, results) => {
+    if (err) {
+      console.error("Error executing the data retrieval query: ", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    res.json(results.rows);
   });
 });
 
@@ -557,14 +638,14 @@ router.get("/getreportsone", (req, res) => {
 
 router.post("/makeprojects", async (req, res) => {
   try {
-    const { client_id, project_name, timeline, job_description, duration, price } = req.body;
+    const { client_id, project_name, timeline, job_description, duration, price, image_url } = req.body;
 
     // Query untuk menyimpan data proyek baru ke database
     const query = `
-      INSERT INTO PROJECT (client_id, project_name, timeline, job_description, duration, price)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      INSERT INTO PROJECT (client_id, project_name, timeline, job_description, duration, price, image_url)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
     `;
-    const values = [client_id, project_name, timeline, job_description, duration, price];
+    const values = [client_id, project_name, timeline, job_description, duration, price, image_url];
 
     // Jalankan query menggunakan koneksi pool
     const result = await db.query(query, values);

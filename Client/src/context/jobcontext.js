@@ -88,7 +88,7 @@ const FilterJobs = ({ children }) => {
   const getJobs = async () => {
     dispatch({ type: "SET_LOADING" });
     try {
-      const response = await axios.get("/getprojects"); // Mengambil data dari backend menggunakan URL "/getprojects"
+      const response = await axios.get("/getprojectsfree"); // Mengambil data dari backend menggunakan URL "/getprojects"
       const projects = response.data;
       dispatch({ type: "SET_API_DATA", payload: projects });
     } catch (error) {

@@ -9,6 +9,13 @@ const Navbar = (props) => {
   const { state, dispatch } = useContext(UserContext);
   const [userRole, setUserRole] = useState(null);
 
+  if (localStorage.getItem("globalUsername") !== null) {
+    window.globalUsername = localStorage.getItem("globalUsername");
+    window.globalUserId = localStorage.getItem("globalUserId");
+    window.globalRole = localStorage.getItem("globalRole");
+    dispatch({ type: "USER", payload: true });
+  }
+
   useEffect(() => {
     const fetchUserRole = async () => {
       try {
@@ -172,11 +179,6 @@ const Navbar = (props) => {
                 <li>
                   <NavLink to="/Dashboard" id="nav-a">
                     Dashboard
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/Profile" id="nav-a">
-                    Profile
                   </NavLink>
                 </li>
               </>

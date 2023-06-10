@@ -22,23 +22,18 @@
 // };
 
 // export default Sidebar;
-import { useEffect } from "react";
+import React from "react";
 import { useLocation, Link } from "react-router-dom";
 import { Card, Typography, List, ListItem, ListItemPrefix, ListItemSuffix, Chip } from "@material-tailwind/react";
 import { PresentationChartBarIcon, CalendarDaysIcon, UserCircleIcon, UserIcon, InboxIcon, PowerIcon } from "@heroicons/react/24/solid";
 
-export default function Example() {
+export default function Sidebar() {
   const location = useLocation();
 
-  useEffect(() => {
-    // Scroll to top when the location changes
-    window.scrollTo(0, 0);
-  }, [location]);
-
   return (
-    <Card className="w-1/4 bg-white border border-black p-4 flex flex-col mt-12 shadow-xl">
+    <Card className="w-1/4 bg-white border border-black p-4 flex flex-col mt-12 shadow-xl sticky top-0">
       <div className="mb-2 p-4">
-        <Typography variant="h5" color="blue-gray">
+        <Typography className="text-2xl font-medium" color="blue-gray">
           LanceNesia || Dashboard
         </Typography>
       </div>
@@ -47,9 +42,7 @@ export default function Example() {
           <ListItemPrefix>
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>
-          <Link to="/dashboard" className="w-full">
-            {" "}
-            {/* Tambahkan properti to="/dashboard" di sini */}
+          <Link to="/dashboard" className="w-full text-xl">
             Dashboard
           </Link>
         </ListItem>
@@ -57,7 +50,7 @@ export default function Example() {
           <ListItemPrefix>
             <UserIcon className="h-5 w-5" />
           </ListItemPrefix>
-          <Link to="/dashboard/listfreelance" className="w-full">
+          <Link to="/dashboard/listfreelance" className="w-full text-xl">
             Freelancer
           </Link>
         </ListItem>
@@ -65,7 +58,7 @@ export default function Example() {
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
           </ListItemPrefix>
-          <Link to="/dashboard/listclient" className="w-full">
+          <Link to="/dashboard/listclient" className="w-full text-xl">
             Client
           </Link>
         </ListItem>
@@ -73,7 +66,7 @@ export default function Example() {
           <ListItemPrefix>
             <CalendarDaysIcon className="h-5 w-5" />
           </ListItemPrefix>
-          <Link to="/dashboard/listproject" className="w-full">
+          <Link to="/dashboard/listproject" className="w-full text-xl">
             Projects
           </Link>
         </ListItem>
@@ -82,7 +75,7 @@ export default function Example() {
             <InboxIcon className="h-5 w-5" />
           </ListItemPrefix>
           <div className="w-full flex items-center">
-            <Link to="/dashboard/listreport" className="flex items-center">
+            <Link to="/dashboard/listreport" className="flex items-center text-xl">
               <span>Reports</span>
               <ListItemSuffix>
                 <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full ml-16" />

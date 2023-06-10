@@ -13,7 +13,27 @@ import ParticlesBg from "particles-bg";
 const Login = () => {
   const { state, dispatch } = useContext(UserContext);
 
+  console.log("Name Local:", localStorage.getItem("globalName"));
+  console.log("User NameLocal:", localStorage.getItem("globalUsername"));
+  console.log("User Id Local:", localStorage.getItem("globalUserId"));
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Cek apakah local storage sudah ada
+    if (localStorage.getItem("globalUsername") && localStorage.getItem("globalUserId")) {
+      // Local storage sudah ada, redirect ke halaman profil
+      navigate("/Profile");
+      if (window.localStorage.getItem("globalRole") === "admin") {
+        navigate("/Home");
+      } else if (window.localStorage.getItem("globalRole") === "freelancer") {
+        navigate("/ProfileFreelance");
+      } else {
+        navigate("/ProfileClient");
+      }
+    }
+  }, [navigate]);
+
   const [user, setUser] = useState({
     name: "",
     username: "",
@@ -21,6 +41,7 @@ const Login = () => {
     password: "",
     cpassword: "",
   });
+
   let name, value;
   const handleInputs = (e) => {
     // console.log(e);
@@ -104,6 +125,7 @@ const Login = () => {
 
       // Assign data.username to a global variable
       window.globalUsername = logemail;
+      localStorage.setItem("globalUsername", logemail);
 
       console.log("data.username : ", logemail);
 
@@ -128,6 +150,13 @@ const Login = () => {
         window.globalName = data[0].name;
         window.globalUserId = data[0].user_id;
         window.globalStartId = data[0].user_id;
+        localStorage.setItem("globalName", data[0].name);
+        localStorage.setItem("globalUserId", data[0].user_id);
+        localStorage.setItem("globalStartId", data[0].user_id);
+        localStorage.setItem("globalRole", data[0].role);
+
+        console.log("User Name Local:", localStorage.getItem("globalName"));
+        console.log("User Id Local:", localStorage.getItem("globalUserId"));
         console.log("User Name:", window.globalName);
         console.log("User Id:", window.globarUserId);
 

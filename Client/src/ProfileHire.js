@@ -50,7 +50,7 @@ const ProfileHire = () => {
 
     // Perform a GET request to retrieve projects data
     axios
-      .get(`/getprojectsclient?client_id=${window.globalUserId}`)
+      .get(`/getprojectshire?client_id=${window.globalUserId}`)
       .then((response) => {
         const projectsData = response.data;
         setProjects(projectsData);
@@ -215,6 +215,12 @@ const ProfileHire = () => {
                       Short Profile:
                     </label>
                     <input type="text" id="short_profile" name="short_profile" value={formData.short_profile} onChange={handleChange} readOnly className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                  </div>
+                  <div>
+                    <label htmlFor="rating" className="block text-sm font-medium text-gray-700">
+                      Rating:
+                    </label>
+                    <input type="text" id="rating" name="rating" value={formData.rating} onChange={handleChange} readOnly className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
                   </div>
                   <div className="flex">
                     <button

@@ -22,6 +22,8 @@ const FFlancer = () => {
       }
     };
 
+    console.log("data", profileData);
+
     fetchActiveFreelancers();
   }, []);
 
@@ -29,13 +31,14 @@ const FFlancer = () => {
     return <div>..........LOADING</div>;
   }
 
+  console.log("data", profileData);
   return (
     <>
       <Hero title="Find Freelancer" desc="Want Your work done, We got your back!!" img={FFHeroImg} placeholder="Find FindFreelancer" />
 
       <CardsHolder>
         {profileData.map((val) => {
-          return <ProfileCards id={val.user_id} category={val.category} experience={val.experience} salary={val.expected_salary} proImg={val.proImg} name={val.name} email={val.username} proStars={val.proStars} />;
+          return <ProfileCards id={val.user_id} category={val.category} experience={val.experience} salary={val.expected_salary} image_url={val.image_url} name={val.name} email={val.username} proStars={val.rating} />;
         })}
       </CardsHolder>
     </>

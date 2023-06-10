@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 const Cards = (curElem) => {
-  let { project_id, category, project_name, timeline, duration, job_description, price, image } = curElem;
+  let { project_id, category, project_name, timeline, duration, job_description, price, image_url } = curElem;
 
   const Wrapper = styled.section`
     .jobs {
@@ -77,7 +77,7 @@ const Cards = (curElem) => {
         <Link to={`/FindJobs/${project_id}`}>
           <li className="inside-jobs-li">
             <div className="images-jobs">
-              <img src={`https://source.unsplash.com/1600x900/?${project_name}`} alt="Video" />
+              <img src={image_url || `https://source.unsplash.com/1600x900/?${project_name}`} alt="Video" />
             </div>
             <div className="cate-content">
               <div className="cate-title">{project_name}</div>

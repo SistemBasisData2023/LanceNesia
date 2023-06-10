@@ -25,16 +25,21 @@ CREATE TABLE users (
     domicile VARCHAR(30) ,
     short_profile TEXT,
     role role_enum,
-    status access_enum
+    status access_enum,
+    image_url TEXT
 );
 
-CREATE TABLE FREELANCER (
+CREATE TABLE freelancer (
     user_id BIGINT PRIMARY KEY,
     category category_enum,
     experience level_enum,
     expected_salary VARCHAR(20),
-    FOREIGN KEY (user_id) REFERENCES USERS(user_id)
+    rating FLOAT DEFAULT 0,
+    total_rating FLOAT DEFAULT 0,
+    temporary_rate FLOAT DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+
 
 CREATE TABLE FREELANCER_EXPERIENCE (
     experience_id SERIAL PRIMARY KEY,
@@ -61,6 +66,7 @@ CREATE TABLE PROJECT (
     status status_enum,
     duration VARCHAR(20),
     price VARCHAR(20),
+    image_url TEXT,
     FOREIGN KEY (client_id) REFERENCES CLIENT(user_id)
 );
 

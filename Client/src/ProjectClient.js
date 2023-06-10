@@ -1,14 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, React } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CheckIcon as BadgeCheckIcon, XCircleIcon as XIcon, EllipsisVerticalIcon as DotsVerticalIcon } from "@heroicons/react/24/solid";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import ParticlesBg from "particles-bg";
+import { Rating, Typography } from "@material-tailwind/react";
+import { ref, uploadBytes, getDownloadURL, listAll, list } from "firebase/storage";
+import { storage } from "./context/firebase";
+import { v4 } from "uuid";
 
 const ListProject = () => {
   const [usernames, setUsernames] = useState({});
-
+  const [freelancerId, setFreelancerId] = useState({});
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTableIndex, setActiveTableIndex] = useState(0);
@@ -16,6 +20,11 @@ const ListProject = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [projectPerPage] = useState(10);
   const [showModal, setShowModal] = useState(false); // State untuk mengontrol tampilan modals
+  const [showModal1, setShowModal1] = useState(false); // State untuk mengontrol tampilan modals
+  const [rated, setRated] = useState(4);
+
+  const [review, setReview] = useState(""); // State untuk mengontrol tampilan modals
+
   const navigate = useNavigate();
 
   const preloader = document.getElementById("preloader");
@@ -33,6 +42,7 @@ const ListProject = () => {
     jobDescription: "",
     duration: "",
     price: "",
+    image_url: "",
   });
 
   const handleInputChange = (e) => {
@@ -51,12 +61,17 @@ const ListProject = () => {
 
       // Mengambil data username untuk setiap project
       const usernamesData = {};
+      const freelancerData = {};
       for (const project of projectsData) {
         const usernameResponse = await axios.get(`/getUsernameByProjectId?project_id=${project.project_id}`);
         const usernames = usernameResponse.data.map((user) => user.name); // Mengambil array nama pengguna dari respons
+        const freelancer_id = usernameResponse.data.map((user) => user.freelancer_id); // Mengambil array nama pengguna dari respons
+
         usernamesData[project.project_id] = usernames;
+        freelancerData[project.project_id] = freelancer_id;
       }
       setUsernames(usernamesData);
+      setFreelancerId(freelancerData);
 
       setIsLoading(false);
       console.log("Projects data:", projectsData);
@@ -107,6 +122,7 @@ const ListProject = () => {
         duration: formData.duration,
         price: formData.price,
         client_id: window.globalUserId,
+        image_url: formData.image_url,
       })
       .then((response) => {
         console.log("Data created successfully");
@@ -132,6 +148,41 @@ const ListProject = () => {
       });
   };
 
+  const handleReview = () => {
+    console.log("Rated:", rated);
+    axios
+      .put("/updateTotalRating", { rated: rated, user_id: window.globalFreelancerId })
+      .then((response) => {
+        console.log("Data deleted successfully");
+        // Panggil kembali fungsi fetchProjects setelah penghapusan berhasil
+        fetchProjects();
+      })
+      .catch((error) => {
+        console.error("Error deleting data: ", error);
+      });
+  };
+
+  const [imageUpload, setImageUpload] = useState(null);
+  const [imageUrls, setImageUrls] = useState([]);
+  const [imageUrlNow, setImageUrlNow] = useState(null);
+
+  const imagesListRef = ref(storage, "images/");
+
+  const uploadFile = (event) => {
+    event.preventDefault(); // Mencegah perilaku default form
+
+    if (imageUpload == null) return;
+    const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+    uploadBytes(imageRef, imageUpload).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        setImageUrls([url]); // Mengganti imageUrls dengan array baru yang hanya berisi URL gambar terbaru
+        console.log("Image URL: ", url);
+        formData.image_url = url;
+        setImageUrlNow(url);
+      });
+    });
+  };
+
   // Get current projects
   const indexOfLastUser = currentPage * projectPerPage;
   const indexOfFirstProject = indexOfLastUser - projectPerPage;
@@ -144,7 +195,7 @@ const ListProject = () => {
 
   // Function untuk menampilkan modals
   const openModal = () => {
-    setFormData({
+    setReview({
       client_id: window.globalUserId,
       projectName: "",
       timeline: "",
@@ -158,6 +209,21 @@ const ListProject = () => {
   // Function untuk menutup modals
   const closeModal = () => {
     setShowModal(false);
+  };
+
+  const openModal1 = (project) => {
+    console.log("Project pilihan:", project);
+    window.globalFreelancerId = freelancerId[project.project_id][0];
+    window.globalRated = rated;
+    console.log("Freelancer id:", window.globalFreelancerId);
+    handleReview(project);
+    setReview("");
+    setShowModal1(true);
+  };
+
+  // Function untuk menutup modals
+  const closeModal1 = () => {
+    setShowModal1(false);
   };
 
   return (
@@ -208,6 +274,11 @@ const ListProject = () => {
                                 <button className="text-gray-500 hover:text-yellow-500 block w-full text-left" onClick={() => handleDelete(project)}>
                                   Delete
                                 </button>
+                                {project.status === "DONE" && (
+                                  <button className="text-gray-500 hover:text-yellow-500 block w-full text-left" onClick={() => openModal1(project)}>
+                                    Review
+                                  </button>
+                                )}
                               </div>
                             )}
                           </div>
@@ -244,6 +315,60 @@ const ListProject = () => {
               </nav>
             )}
           </div>
+          {showModal1 && (
+            <div className="fixed z-10 inset-0 overflow-y-auto">
+              <div className="flex items-center justify-center px-4 text-center">
+                <div className="fixed inset-0 transition-opacity">
+                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                </div>
+                <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>&#8203;
+                <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
+                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div className="sm:flex sm:items-start">
+                      <div className="sm:mt-0 sm:text-left w-full">
+                        <h3 className="text-center text-2xl leading-6 font-medium text-gray-900" id="modal-headline">
+                          Review Freelancer
+                        </h3>
+                        <div className="mt-12">
+                          {/* Form untuk create project */}
+                          {/* Tambahkan form input sesuai kebutuhan */}
+                          <form className="grid grid-cols-1 gap-4">
+                            <div className="mb-4 justify-center items-center">
+                              <label className="block text-gray-700 text-xl font-medium mb-2 items-center justify-center text-center" htmlFor="projectName">
+                                Give a review with stars
+                              </label>
+                              <div className="flex items-center gap-2 mt-4 justify-center">
+                                <Rating color="primary" value={4} onChange={(value) => setRated(value)} style={{ color: "#FFB700" }} />
+                                <Typography color="blue-gray" className="font-medium">
+                                  {rated} Rated
+                                </Typography>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button
+                      type="button"
+                      className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                      onClick={handleReview}
+                    >
+                      Review
+                    </button>
+                    <button
+                      type="button"
+                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                      onClick={closeModal1}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           {showModal && (
             <div className="fixed z-10 inset-0 overflow-y-auto">
               <div className="flex items-center justify-center px-4 text-center">
@@ -262,6 +387,25 @@ const ListProject = () => {
                           {/* Form untuk create project */}
                           {/* Tambahkan form input sesuai kebutuhan */}
                           <form className="grid grid-cols-2 gap-4">
+                            <div className="flex justify-center">
+                              <img
+                                src={imageUrlNow || formData.image_url || "https://ik.imagekit.io/abdfikih/lancenesia-high-resolution-logo-color-on-transparent-background__1_.png?updatedAt=1685162869863"}
+                                alt="Profile Picture"
+                                className="w-40 h-30"
+                              />
+                            </div>
+                            <div>
+                              <input
+                                type="file"
+                                onChange={(event) => {
+                                  setImageUpload(event.target.files[0]);
+                                }}
+                              />
+                              <button onClick={uploadFile} className="mt-4 py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                                {" "}
+                                Upload Image
+                              </button>
+                            </div>
                             <div className="mb-4">
                               <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="projectName">
                                 Project Name

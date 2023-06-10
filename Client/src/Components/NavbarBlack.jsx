@@ -9,6 +9,12 @@ const Navbar = (props) => {
   const { state, dispatch } = useContext(UserContext);
   const [userRole, setUserRole] = useState(null);
 
+  if (localStorage.getItem("globalUsername") !== null) {
+    window.globalUsername = localStorage.getItem("globalUsername");
+    window.globalUserId = localStorage.getItem("globalUserId");
+    window.globalRole = localStorage.getItem("globalRole");
+  }
+
   useEffect(() => {
     const fetchUserRole = async () => {
       try {

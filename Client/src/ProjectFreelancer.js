@@ -107,7 +107,7 @@ const ProjectFreelancer = () => {
 
   const handleDelete = (project) => {
     axios
-      .post("/deleteprojects", { project_id: project.project_id })
+      .post("/deleteprojectsfreelance", { project_id: project.project_id, freelance_id: window.globalUserId })
       .then((response) => {
         console.log("Data deleted successfully");
         // Panggil kembali fungsi fetchProjects setelah penghapusan berhasil

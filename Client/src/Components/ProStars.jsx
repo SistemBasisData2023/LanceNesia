@@ -5,26 +5,31 @@ import styled from "styled-components";
 
 const ProStars = ({ stars, reviews }) => {
   const ratingStar = Array.from({ length: 5 }, (elem, index) => {
-    let number = index + 0.5;
+    const starValue = index + 1;
+    let starIcon;
+    let starClassName = "icon";
 
-    return (
-      <span key={index}>
-        {stars >= index + 1 ? (
-          <FaStar className="icon" />
-        ) : stars >= number ? (
-          <FaStarHalfAlt className="icon" />
-        ) : (
-          <AiOutlineStar className="icon" />
-        )}
-      </span>
-    );
+    if (stars >= starValue) {
+      starIcon = <FaStar className={starClassName} />;
+    } else if (stars >= starValue - 0.5) {
+      starIcon = <FaStarHalfAlt className={starClassName} />;
+    } else {
+      starIcon = <AiOutlineStar className={starClassName} />;
+    }
+
+    return <span key={index}>{starIcon}</span>;
   });
+
   return (
     <Wrapper>
-      <div className="icon-style">{ratingStar}</div>
+      <div className="icon-style">
+        {ratingStar}
+        <span className="star-value">{stars}</span>
+      </div>
     </Wrapper>
   );
 };
+
 const Wrapper = styled.section`
   .icon-style {
     display: flex;
@@ -37,6 +42,10 @@ const Wrapper = styled.section`
     }
     .empty-icon {
       font-size: 2.6rem;
+    }
+    .star-value {
+      margin-left: 0.5rem;
+      font-size: 1.1rem;
     }
   }
 `;

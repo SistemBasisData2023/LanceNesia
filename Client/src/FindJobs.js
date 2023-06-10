@@ -27,31 +27,6 @@ const FindJobs = () => {
     }, 0);
   }
 
-  const callFJ = async () => {
-    try {
-      const res = await fetch("/Findjobs", {
-        method: "GET", //! IMP
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      dispatch({ type: "USER", payload: true });
-
-      const data = await res.json();
-      // console.log(data);
-
-      if (!res.status === 200) {
-        const error = new Error(res.error);
-        throw error;
-      }
-    } catch (err) {
-      console.log(err);
-      navigate("/Login");
-    }
-  };
-
   useEffect(() => {
     // callFJ();
     // eslint-disable-next-line react-hooks/exhaustive-deps

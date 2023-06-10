@@ -77,9 +77,13 @@ const UpdateProject = () => {
   let className = "flex";
 
   console.log("Rolenya ada :", window.globalRole);
+  console.log("status: ", formData.status);
 
-  if (window.globalRole === "client") {
+  if (window.globalRole === "client" || window.globalRole === "freelancer") {
     className += " justify-center items-center";
+    if (window.globalRole === "freelancer") {
+      window.globalFreelancerName = window.globalName;
+    }
   }
 
   return (
@@ -103,7 +107,15 @@ const UpdateProject = () => {
                   <label htmlFor="project_id" className="block text-sm font-medium text-gray-700">
                     ID Project:
                   </label>
-                  <input type="text" id="project_id" name="project_id" value={formData.project_id} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                  <input
+                    type="text"
+                    id="project_id"
+                    name="project_id"
+                    value={formData.project_id}
+                    onChange={handleChange}
+                    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                    disabled={window.globalRole === "freelancer" || window.globalRole === "client"}
+                  />
                 </div>
                 {window.globalRole === "Admin" && (
                   <div>
@@ -118,53 +130,61 @@ const UpdateProject = () => {
                   <label htmlFor="freelancer" className="block text-sm font-medium text-gray-700">
                     Freelancer:
                   </label>
-                  <input type="text" id="freelancer" name="freelancer" value={window.globalFreelancerName} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                  <input
+                    type="text"
+                    id="freelancer"
+                    name="freelancer"
+                    value={window.globalFreelancerName}
+                    onChange={handleChange}
+                    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                    disabled={window.globalRole === "freelancer" || window.globalRole === "client"}
+                  />
                 </div>
 
                 <div>
                   <label htmlFor="project_name" className="block text-sm font-medium text-gray-700">
                     Project Name:
                   </label>
-                  <input type="text" id="project_name" name="project_name" value={formData.project_name} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                  <input type="text" id="project_name" name="project_name" value={formData.project_name} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" disabled={window.globalRole === "freelancer"} />
                 </div>
 
                 <div>
                   <label htmlFor="timeline" className="block text-sm font-medium text-gray-700">
                     Timeline:
                   </label>
-                  <input type="text" id="timeline" name="timeline" value={formData.timeline} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                  <input type="text" id="timeline" name="timeline" value={formData.timeline} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" disabled={window.globalRole === "freelancer"} />
                 </div>
 
                 <div>
                   <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
                     Duration:
                   </label>
-                  <input type="text" id="duration" name="duration" value={formData.duration} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                  <input type="text" id="duration" name="duration" value={formData.duration} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" disabled={window.globalRole === "freelancer"} />
                 </div>
 
                 <div>
                   <label htmlFor="price" className="block text-sm font-medium text-gray-700">
                     Price:
                   </label>
-                  <input type="text" id="price" name="price" value={formData.price} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                  <input type="text" id="price" name="price" value={formData.price} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" disabled={window.globalRole === "freelancer"} />
                 </div>
 
                 <div>
                   <label htmlFor="job_description" className="block text-sm font-medium text-gray-700">
                     Job Descriptions:
                   </label>
-                  <textarea id="job_description" name="job_description" value={formData.job_description} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" />
+                  <textarea id="job_description" name="job_description" value={formData.job_description} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" disabled={window.globalRole === "freelancer"} />
                 </div>
 
                 <div>
                   <label htmlFor="status" className="block text-sm font-medium text-gray-700">
                     Status:
                   </label>
-                  <select id="status" name="status" value={formData.status} onChange={handleChange} disabled className="mt-1 p-2 border border-gray-300 rounded-md w-full">
+                  <select id="status" name="status" value={formData.status} onChange={handleChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full">
                     <option value="">Select Status</option>
-                    <option value="ACCEPTED">PENDING</option>
-                    <option value="PENDING">DENIED</option>
-                    <option value="REJECTED">ACCEPTED</option>
+                    <option value="ACCEPTED">ACCEPTED</option>
+                    <option value="PENDING">PENDING</option>
+                    <option value="DENIED">DENIED</option>
                     <option value="NOT STARTED">NOT STARTED</option>
                     <option value="25%">25%</option>
                     <option value="50%">50%</option>

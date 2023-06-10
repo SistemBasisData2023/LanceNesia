@@ -23,19 +23,42 @@ const SingleJob = () => {
       try {
         const response = await axios.get(`/getprojectsone?project_id=${id}`);
         setJobData(response.data[0]);
+        console.log("data single", jobData);
         setLoading(false);
       } catch (error) {
         console.log(error);
         setLoading(false);
       }
     };
-
     fetchJobData();
-  }, [id]);
+  }, []);
+
+  const handleAplly = () => {
+    console.log("Freelancer ID APPLY: ", window.globalUserId);
+    console.log("Project ID APPLY: ", jobData.project_id);
+    const data = {
+      project_id: jobData.project_id,
+      freelancer_id: window.globalUserId,
+    };
+
+    axios
+      .post("/projectfreelancer", data)
+      .then((response) => {
+        console.log("Data inserted successfully");
+        // Lakukan tindakan lain setelah data berhasil diinsert
+        navigate(-1); // Kembali ke halaman /home
+      })
+      .catch((error) => {
+        console.error("Error executing the INSERT query:", error);
+        // Lakukan tindakan lain jika terjadi kesalahan
+      });
+  };
 
   useEffect(() => {
     if (jobData) {
-      console.log("name project: ", jobData.project_name);
+      console.log("data single", jobData);
+
+      console.log("name project1: ", jobData.project_name);
     }
   }, [jobData]);
 
@@ -58,8 +81,8 @@ const SingleJob = () => {
                     <img src={`https://source.unsplash.com/1600x900/?${jobData.project_name}`} alt="Project" className="h-80 w-full object-cover rounded-lg shadow-md" />
                   </CardContent>
                   <CardActions>
-                    <Button variant="contained" color="primary" startIcon={<SendIcon />} fullWidth className="hover:bg-blue-600">
-                      <a href="mailto:abdulfikihk@gmail.com">Apply Project</a>
+                    <Button variant="contained" onClick={handleAplly} color="primary" startIcon={<SendIcon />} fullWidth className="hover:bg-blue-600">
+                      Apply Project
                     </Button>
                   </CardActions>
                 </Card>
@@ -71,6 +94,10 @@ const SingleJob = () => {
                   <CardContent>
                     <Typography variant="h6" className="font-poppins font-semibold mb-4">
                       Title: <span className="text-blue-700">{jobData.project_name}</span>
+                    </Typography>
+                    <hr className="my-2" />
+                    <Typography variant="body2" className="font-poppins mt-2">
+                      Company: {jobData.company_name}
                     </Typography>
                     <hr className="my-2" />
                     <Typography variant="body2" className="font-poppins mt-2">

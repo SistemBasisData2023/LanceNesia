@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 const ProfileCards = (props) => {
   const navigate = useNavigate();
 
+  console.log(props);
+
   const handleSeeProfileClick = (id) => {
     // Navigate to the next page with the ID
     navigate(`/FindFreelancer/${id}`);
@@ -27,8 +29,12 @@ const ProfileCards = (props) => {
         <div data-aos="fade-up" data-duration="2000" data-aos-offset="150" data-aos-anchor-placement="top-bottom" data-aos-easing="ease-in-out" className="jobs">
           <div className="profile-cards">
             <div className="profile-content">
-              <div className="profile-speciality">{props.category}</div>
-
+              <div className="time-price">
+                <div className="profile-name">{props.category}</div>
+                <div className="profile-stars">
+                  <ProStars stars={props.proStars} />
+                </div>{" "}
+              </div>
               <div className="time-price">
                 <div className="profile-time">
                   <AiOutlineTeam className="icon" />
@@ -39,14 +45,11 @@ const ProfileCards = (props) => {
 
               <div className="profile-img-name">
                 <div className="profile-img">
-                  <img src={props.proImg} alt="" />
+                  <img src={props.image_url || "https://ik.imagekit.io/abdfikih/User-Profile-Icon-9mces.png?updatedAt=1686397269218"} alt="" />
                 </div>
                 <div>
                   <div className="profile-name-stars">
                     <div className="profile-name">{props.name}</div>
-                    <div className="profile-stars">
-                      <ProStars stars={props.proStars} />
-                    </div>
                   </div>
 
                   <div className="profile-connection">

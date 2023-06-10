@@ -21,6 +21,8 @@ const Logout = () => {
       .then((res) => {
         dispatch({ type: "USER", payload: false });
         window.globalState = false;
+        localStorage.clear();
+
         navigate("/Login");
         if (!res.status === 200) {
           const error = new Error(res.error);
