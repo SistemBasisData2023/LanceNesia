@@ -89,10 +89,11 @@ JavaScript
 HTML
 CSS
 SCSS
+Firebase (Minor)
 
 ### Backend
 
-PostgreSQL
+Neon SQL (SQL)
 Node.js
 Express.js
 JavaScript
@@ -139,11 +140,7 @@ The following are tables that is used in LanceNesia's database.
 9. short_profile
 10. role
 11. status
-<<<<<<< HEAD
 12.image_url
-=======
-12. image_url
->>>>>>> 988d6833a73181b0a9d8113f3313ccfbec34c0ed
 ```
 
 ### 3. `Freelancer`
