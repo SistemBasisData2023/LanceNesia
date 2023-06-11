@@ -69,6 +69,14 @@ Freelancers can easily search and filter through the available projects based on
 
 The Freelancer Marketplace offers a secure transaction processing system, allowing clients to make transactions to freelancers upon successful completion of the project. This feature ensures a smooth and transparent transaction process, giving both parties peace of mind.
 
+### Hiring
+
+Freelancers will be able to apply directly for open project positions that will be sent to the corresponding client, and vice versa, the client will be able to propose their projects to specific freelancers they deem suitable for the job. This ensures two-way interaction that maximizes both users' experiences.
+
+### Admin and Report-Handling
+
+This website will be closely monitored by our admin who has full and extensive access towards all database used within: freelancers, client, project, as well as reports. The last one being a mechanism to ensure user experience by making sure all complaints are addressed, which the admin will then be able to resolve by taking further action if needed, such if by banning accounts.
+
 ## Technologies
 
 The Freelancer Marketplace is built using the following technologies:
