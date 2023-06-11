@@ -83,20 +83,20 @@ The Freelancer Marketplace is built using the following technologies:
 
 ### Frontend
 
-Node.js
-Tailwind CSS
-JavaScript
-HTML
-CSS
-SCSS
-Firebase (Minor)
+1. Node.js
+2. Tailwind CSS
+3. JavaScript
+4. HTML
+5. CSS
+6. SCSS
+7. Firebase (Minor)
 
 ### Backend
 
-Neon SQL (SQL)
-Node.js
-Express.js
-JavaScript
+1. Neon SQL (SQL)
+2. Node.js
+3. Express.js
+4. JavaScript
 
 ## Diagrams
 
