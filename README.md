@@ -98,7 +98,8 @@ The following are tables that is used in LanceNesia's database.
 8. domicile
 9. short_profile
 10. role
-11. access
+11. status
+12. image_url
 ```
 
 ### 3. `Freelancer`
@@ -108,6 +109,9 @@ The following are tables that is used in LanceNesia's database.
 2. category
 3. experience
 4. expected_salary
+5. rating
+6. total_rating
+7. temporary_rate
 ```
 
 ### 4. `Client`
@@ -126,6 +130,9 @@ The following are tables that is used in LanceNesia's database.
 4. timeline
 5. job_desc
 6. status
+7. duration
+8. price
+9. image_url
 ```
 
 ### 6. `Freelancer_experience`
@@ -145,4 +152,5 @@ The following are tables that is used in LanceNesia's database.
 1. project_freelancer_id
 2. project_id
 3. freelancer_id
+4. destination
 ```
