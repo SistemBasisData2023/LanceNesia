@@ -62,7 +62,7 @@ JavaScript
 
 ### UML
 
-<img width="7634" alt="LanceNesia-3" src="https://github.com/SistemBasisData2023/LanceNesia/assets/134858335/07f7720f-82a1-4db7-854b-3e09823cc581">
+<img width="7634" alt="LanceNesia-9" src="https://github.com/SistemBasisData2023/LanceNesia/assets/134858335/a3cca03c-238f-4035-80e9-4554ab823a91">
 
 ### Entity-Relation Diagram (ERD)
 
