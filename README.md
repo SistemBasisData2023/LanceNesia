@@ -16,6 +16,37 @@ This is a final Database Management System project made by Group V22:
 - [Muhammad Aqil Muzakky](https://www.github.com/muzakkyaqil) - 2106731604
 - [Syauqi Aulia](https://www.github.com/Chokode) - 2106707201
 
+## Installation
+
+This project utilizes Node Package Manager, To install the project, run the following commands:
+
+```bash
+https://github.com/SistemBasisData2023/LanceNesia.git
+cd LanceNesia
+```
+
+## Usage Frontend
+
+To run the project, run the following commands:
+
+```bash
+cd Client
+npm install
+npm start
+```
+
+## Usage Backend
+
+To run the project, run the following commands:
+
+```bash
+cd Server
+npm install
+node server.js
+```
+
+It should run the website on `localhost:3000`, while the backend runs on `localhost:5000`, On Proxy, If you have website deployment, you can create env variabel HOST=joinweb.com.
+
 ## Features
 
 ### Freelancer Registration
@@ -67,8 +98,9 @@ The following are tables that is used in LanceNesia's database.
 ```
 1. report_id
 2. reporter_id
-3. message
-4. status
+3. username
+4. message
+5. status
 ```
 
 ### 2. `Users`
@@ -84,7 +116,8 @@ The following are tables that is used in LanceNesia's database.
 8. domicile
 9. short_profile
 10. role
-11. access
+11. status
+12.image_url
 ```
 
 ### 3. `Freelancer`
@@ -94,6 +127,9 @@ The following are tables that is used in LanceNesia's database.
 2. category
 3. experience
 4. expected_salary
+5. rating
+6. total_rating
+7. temporary_rate
 ```
 
 ### 4. `Client`
@@ -112,6 +148,9 @@ The following are tables that is used in LanceNesia's database.
 4. timeline
 5. job_desc
 6. status
+7. duration
+8. price
+9. image_url
 ```
 
 ### 6. `Freelancer_experience`
@@ -131,4 +170,32 @@ The following are tables that is used in LanceNesia's database.
 1. project_freelancer_id
 2. project_id
 3. freelancer_id
+4. destination_enum
 ```
+
+## Flowchart
+
+<details>
+  <summary>Click Here</summary>
+  
+![LanceNesia Flowchart](https://ik.imagekit.io/abdfikih/LanceNesia__7_.png?updatedAt=1686495705022)
+
+</details>
+
+## UML Diagram
+
+<details>
+  <summary>Click Here</summary>
+
+![LanceNesia UML](https://ik.imagekit.io/abdfikih/LanceNesia__8_.png?updatedAt=1686495858679)
+
+</details>
+
+## Entity Relationship Diagram
+
+<details>
+  <summary>Click Here</summary>
+
+![LanceNesia ERD](https://ik.imagekit.io/abdfikih/LanceNesia__9_.png?updatedAt=1686495971230)
+
+</details>
