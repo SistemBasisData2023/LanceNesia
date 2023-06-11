@@ -38,7 +38,7 @@ Freelancers can easily search and filter through the available projects based on
 
 The Freelancer Marketplace offers a secure transaction processing system, allowing clients to make transactions to freelancers upon successful completion of the project. This feature ensures a smooth and transparent transaction process, giving both parties peace of mind.
 
-### Technologies
+## Technologies
 
 The Freelancer Marketplace is built using the following technologies:
 
@@ -57,6 +57,20 @@ PostgreSQL
 Node.js
 Express.js
 JavaScript
+
+## Diagrams
+
+### UML
+
+<img width="7634" alt="LanceNesia-3" src="https://github.com/SistemBasisData2023/LanceNesia/assets/134858335/07f7720f-82a1-4db7-854b-3e09823cc581">
+
+### Entity-Relation Diagram (ERD)
+
+<img width="5677" alt="LanceNesia-2" src="https://github.com/SistemBasisData2023/LanceNesia/assets/134858335/e9d4d9e4-6255-4f1c-991c-4e05af7c4215">
+
+### Flowchart
+
+<img width="4144" alt="LanceNesia-8" src="https://github.com/SistemBasisData2023/LanceNesia/assets/134858335/bdcd71f3-75d9-445c-9ebc-d9ff89067104">
 
 ## Tables
 
