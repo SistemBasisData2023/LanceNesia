@@ -110,7 +110,7 @@ The Freelancer Marketplace is built using the following technologies:
 
 ### Flowchart
 
-<img width="4144" alt="LanceNesia-8" src="https://github.com/SistemBasisData2023/LanceNesia/assets/134858335/bdcd71f3-75d9-445c-9ebc-d9ff89067104">
+<img width="4144" alt="LanceNesia-8" src="https://ik.imagekit.io/abdfikih/FlowChart_LanceNesia.png?updatedAt=1686501707153">
 
 ## Tables
 
