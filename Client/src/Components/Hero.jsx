@@ -97,43 +97,18 @@ const Hero = (props) => {
       <Wrapper>
         <section className="static">
           <div className="textArea">
-            <h1
-              data-aos="fade-down"
-              data-duration="2000"
-              data-aos-delay="400"
-              data-aos-easing="ease-in-out"
-            >
+            <h1 data-aos="fade-down" data-duration="2000" data-aos-delay="400" data-aos-easing="ease-in-out">
               {props.title}
             </h1>
             <br />
-            <p
-              data-aos="fade-up"
-              data-duration="2000"
-              data-aos-delay="400"
-              data-aos-easing="ease-in-out"
-            >
+            <p data-aos="fade-up" data-duration="2000" data-aos-delay="400" data-aos-easing="ease-in-out">
               {props.desc}
             </p>
             <div className="wrapper">
-              <div
-                data-aos="zoom-in"
-                data-duration="2000"
-                data-aos-delay="400"
-                data-aos-easing="ease-in-out"
-                className="searchBar"
-              >
-                <input
-                  id="searchQueryInput"
-                  type="text"
-                  name="searchQueryInput"
-                  placeholder={props.placeholder}
-                />
+              <div data-aos="zoom-in" data-duration="2000" data-aos-delay="400" data-aos-easing="ease-in-out" className="searchBar">
+                <input id="searchQueryInput" type="text" name="searchQueryInput" placeholder={props.placeholder} />
                 {/* </form> */}
-                <button
-                  id="searchQuerySubmit"
-                  type="submit"
-                  name="searchQuerySubmit"
-                >
+                <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
                   Search
                 </button>
               </div>

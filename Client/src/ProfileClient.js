@@ -222,7 +222,7 @@ const UpdateFreelance = () => {
         <Footer />
         {formDataClient.company_name === null ? <ModalExample /> : null}
       </div>
-      <ParticlesBg type="random" bg={true} />
+      <ParticlesBg type="color" bg={true} />
     </>
   );
 };

@@ -42,7 +42,7 @@ const SingleJob = () => {
     };
 
     axios
-      .post("/projectfreelancer", data)
+      .post("/projectfreelancerfree", data)
       .then((response) => {
         console.log("Data inserted successfully");
         // Lakukan tindakan lain setelah data berhasil diinsert

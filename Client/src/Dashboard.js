@@ -124,28 +124,7 @@ const UserListPage = () => {
               <Grid item md={8} sx={{ display: { sm: "none", md: "block", lg: "none" } }} />
 
               {/* row 2 */}
-              <Grid item xs={12} md={7} lg={8}>
-                <Grid container alignItems="center" justifyContent="space-between">
-                  <Grid item>
-                    <Typography variant="h5">Unique Visitor</Typography>
-                  </Grid>
-                  <Grid item>
-                    <Stack direction="row" alignItems="center" spacing={0}>
-                      <Button size="small" onClick={() => setSlot("month")} color={slot === "month" ? "primary" : "secondary"} variant={slot === "month" ? "outlined" : "text"}>
-                        Month
-                      </Button>
-                      <Button size="small" onClick={() => setSlot("week")} color={slot === "week" ? "primary" : "secondary"} variant={slot === "week" ? "outlined" : "text"}>
-                        Week
-                      </Button>
-                    </Stack>
-                  </Grid>
-                </Grid>
-                <MainCard content={false} sx={{ mt: 1.5 }}>
-                  <Box sx={{ pt: 1, pr: 2 }}>
-                    <IncomeAreaChart slot={slot} />
-                  </Box>
-                </MainCard>
-              </Grid>
+
               <Grid item xs={12} md={5} lg={4}>
                 <Grid container alignItems="center" justifyContent="space-between">
                   <Grid item>
@@ -159,7 +138,7 @@ const UserListPage = () => {
                       <Typography variant="h6" color="textSecondary">
                         This Week Statistics
                       </Typography>
-                      <Typography variant="h3">$7,650</Typography>
+                      <Typography variant="h3">7,650 People</Typography>
                     </Stack>
                   </Box>
                   <MonthlyBarChart />
@@ -170,7 +149,7 @@ const UserListPage = () => {
               <Grid item xs={12} md={7} lg={8}>
                 <Grid container alignItems="center" justifyContent="space-between">
                   <Grid item>
-                    <Typography variant="h5">Recent Orders</Typography>
+                    <Typography variant="h5">Recent Transaction</Typography>
                   </Grid>
                   <Grid item />
                 </Grid>
@@ -188,7 +167,7 @@ const UserListPage = () => {
                 <MainCard sx={{ mt: 2 }} content={false}>
                   <List sx={{ p: 0, "& .MuiListItemButton-root": { py: 2 } }}>
                     <ListItemButton divider>
-                      <ListItemText primary="Company Finance Growth" />
+                      <ListItemText primary="Company Project Growth" />
                       <Typography variant="h5">+45.14%</Typography>
                     </ListItemButton>
                     <ListItemButton divider>
@@ -225,7 +204,7 @@ const UserListPage = () => {
                     <Typography variant="h6" color="secondary">
                       Net Profit
                     </Typography>
-                    <Typography variant="h4">$1560</Typography>
+                    <Typography variant="h4">IDR 1.560.000.000</Typography>
                   </Stack>
                   <SalesColumnChart />
                 </MainCard>
@@ -336,10 +315,10 @@ const UserListPage = () => {
                       </Grid>
                       <Grid item>
                         <AvatarGroup sx={{ "& .MuiAvatar-root": { width: 32, height: 32 } }}>
-                          <Avatar alt="Remy Sharp" src={" "} />
-                          <Avatar alt="Travis Howard" src={" "} />
-                          <Avatar alt="Cindy Baker" src={" "} />
-                          <Avatar alt="Agnes Walker" src={" "} />
+                          <Avatar alt="A" src={" "} />
+                          <Avatar alt="F" src={" "} />
+                          <Avatar alt="K" src={" "} />
+                          <Avatar alt="C" src={" "} />
                         </AvatarGroup>
                       </Grid>
                     </Grid>

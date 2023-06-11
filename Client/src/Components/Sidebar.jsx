@@ -31,8 +31,8 @@ export default function Sidebar() {
   const location = useLocation();
 
   return (
-    <Card className="w-1/4 bg-white border border-black p-4 flex flex-col mt-12 shadow-xl sticky top-0">
-      <div className="mb-2 p-4">
+    <Card className="w-1/4 max-h-screen bg-white border border-black p-4 flex flex-col mt-12 shadow-xl sticky top-0">
+      <div className="mb-2 mt-12 p-4">
         <Typography className="text-2xl font-medium" color="blue-gray">
           LanceNesia || Dashboard
         </Typography>

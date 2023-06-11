@@ -27,6 +27,7 @@ const ProfileHire = () => {
     experience: "",
     category: "",
     expected_salary: "",
+    image_url: "",
   });
 
   const [projects, setProjects] = useState([]);
@@ -55,6 +56,7 @@ const ProfileHire = () => {
         const projectsData = response.data;
         setProjects(projectsData);
         console.log("Projects data:", projectsData);
+        console.log("Projects data 2 :", response.data);
       })
       .catch((error) => {
         console.error("Error fetching projects data: ", error);
@@ -65,6 +67,7 @@ const ProfileHire = () => {
     const freelancerId = id; // Ganti dengan id freelancer yang ingin dihire
     console.log("Freelancer ID HIRE: ", freelancerId);
     console.log("Project ID HIRE: ", selectedProject);
+    console.log("Project HIRE: ", projects);
     const data = {
       project_id: selectedProject,
       freelancer_id: freelancerId,
@@ -136,7 +139,7 @@ const ProfileHire = () => {
           <div className="w-3/4 p-4 mt-20 mx-auto">
             {/* Profile Picture */}
             <div className="flex justify-center">
-              <img src="https://ik.imagekit.io/abdfikih/Young_businesswoman.jpg?updatedAt=1685714279176" alt="Profile Picture" className="w-40 h-40 rounded-full" />
+              <img src={formData.image_url || "https://ik.imagekit.io/abdfikih/User-Profile-Icon-9mces.png?updatedAt=1686397269218"} alt="Profile Picture" className="w-40 h-40 rounded-full" />
             </div>
             {/* Card */}
             <div className="bg-white shadow-md rounded-lg p-8 mt-6">

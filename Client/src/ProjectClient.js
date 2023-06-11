@@ -13,6 +13,7 @@ import { v4 } from "uuid";
 const ListProject = () => {
   const [usernames, setUsernames] = useState({});
   const [freelancerId, setFreelancerId] = useState({});
+  const [destination, setDestination] = useState({});
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTableIndex, setActiveTableIndex] = useState(0);
@@ -62,16 +63,20 @@ const ListProject = () => {
       // Mengambil data username untuk setiap project
       const usernamesData = {};
       const freelancerData = {};
+      const destinationData = {};
       for (const project of projectsData) {
         const usernameResponse = await axios.get(`/getUsernameByProjectId?project_id=${project.project_id}`);
         const usernames = usernameResponse.data.map((user) => user.name); // Mengambil array nama pengguna dari respons
         const freelancer_id = usernameResponse.data.map((user) => user.freelancer_id); // Mengambil array nama pengguna dari respons
+        const destination = usernameResponse.data.map((user) => user.destination); // Mengambil array nama pengguna dari respons
 
         usernamesData[project.project_id] = usernames;
         freelancerData[project.project_id] = freelancer_id;
+        destinationData[project.project_id] = destination;
       }
       setUsernames(usernamesData);
       setFreelancerId(freelancerData);
+      setDestination(destinationData);
 
       setIsLoading(false);
       console.log("Projects data:", projectsData);
@@ -153,9 +158,10 @@ const ListProject = () => {
     axios
       .put("/updateTotalRating", { rated: rated, user_id: window.globalFreelancerId })
       .then((response) => {
-        console.log("Data deleted successfully");
+        console.log("Data Review successfully");
         // Panggil kembali fungsi fetchProjects setelah penghapusan berhasil
         fetchProjects();
+        closeModal1();
       })
       .catch((error) => {
         console.error("Error deleting data: ", error);
@@ -216,7 +222,6 @@ const ListProject = () => {
     window.globalFreelancerId = freelancerId[project.project_id][0];
     window.globalRated = rated;
     console.log("Freelancer id:", window.globalFreelancerId);
-    handleReview(project);
     setReview("");
     setShowModal1(true);
   };
@@ -249,6 +254,7 @@ const ListProject = () => {
                       <th className="px-6 py-3 bg-blue-300 text-left font-semibold text-sm uppercase border-b">Freelancer</th>
                       <th className="px-6 py-3 bg-blue-300 text-left font-semibold text-sm uppercase border-b">Timeline</th>
                       <th className="px-6 py-3 bg-blue-300 text-left font-semibold text-sm uppercase border-b">Status</th>
+                      <th className="px-6 py-3 bg-blue-300 text-left font-semibold text-sm uppercase border-b">Sender</th>
                       <th className="px-6 py-3 bg-blue-300 text-left font-semibold text-sm uppercase border-b">Actions</th>
                     </tr>
                   </thead>
@@ -261,6 +267,7 @@ const ListProject = () => {
 
                         <td className="px-6 py-4 whitespace-nowrap">{project.timeline}</td>
                         <td className="px-6 py-4 whitespace-nowrap">{project.status}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{destination[project.project_id] ? destination[project.project_id][0] : ""}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="relative inline-block">
                             <button className="text-gray-500 hover:text-gray-700" onClick={() => handleMenuClick(index)}>

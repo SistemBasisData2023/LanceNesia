@@ -252,7 +252,7 @@ const UpdateFreelance = () => {
         <Footer />
         {formData.domicile === " " || formData.category === " " || formData.experience === " " || formData.expected_salary === " " || formData.short_profile === " " ? <ModalExample /> : null}
       </div>
-      <ParticlesBg type="random" bg={true} params={{ color: "#FFF" }} />
+      <ParticlesBg type="color" bg={true} params={{ color: "#FFF" }} />
     </>
   );
 };

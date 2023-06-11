@@ -72,7 +72,7 @@ const UserListPage = () => {
   };
 
   const handleEdit = (user) => {
-    window.globalUserId = user.user_id;
+    window.globalNewId = user.user_id;
     console.log("Edit user:", user);
     navigate("/Dashboard/ListFreelance/UpdateUsers");
   };

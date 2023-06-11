@@ -1,7 +1,7 @@
 // router.js
 
 const express = require("express");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const app = require("../middleware/middleware");
 const db = require("../models/model");
 
@@ -142,13 +142,29 @@ router.get("/getusers", (req, res) => {
 });
 
 router.get("/getactivefreelance", (req, res) => {
-  // Query to retrieve data from the users and freelancer tables with conditions
-  const query = `
-  SELECT users.user_id, name, username, category, expected_salary, experience, rating, image_url
-  FROM users
-  LEFT JOIN freelancer ON users.user_id = freelancer.user_id
-  WHERE users.role = 'freelancer' AND (users.status IS NULL OR users.status != 'Banned') AND freelancer.user_id IS NOT NULL
+  // Get the category and price parameters from the request query
+  const { category, price } = req.query;
+  console.log(category, price);
+
+  // Prepare the SQL query with the category and price filters
+  let query = `
+    SELECT users.user_id, name, username, category, expected_salary, experience, rating, image_url
+    FROM users
+    LEFT JOIN freelancer ON users.user_id = freelancer.user_id
+    WHERE users.role = 'freelancer' AND (users.status IS NULL OR users.status != 'Banned') AND freelancer.user_id IS NOT NULL
   `;
+
+  // Add the category filter to the query if a category is provided
+  if (category) {
+    query += ` AND category = '${category}'`;
+  }
+
+  // Add the price filter to the query if a rice is provided
+  if (price === "Ascending") {
+    query += ` ORDER BY CAST(REPLACE(expected_salary, '.', '') AS DECIMAL) ASC`;
+  } else if (price === "Descending") {
+    query += ` ORDER BY CAST(REPLACE(expected_salary, '.', '') AS DECIMAL) DESC`;
+  }
 
   // Execute the query
   db.query(query, (error, results) => {
@@ -286,7 +302,7 @@ router.get("/getUsernameByProjectId", async (req, res) => {
 
     // Menggunakan query SQL JOIN untuk mengambil freelancer_id dan nama pengguna (users.name)
     const query = `
-    SELECT name, freelancer_id
+    SELECT name, freelancer_id, destination
     FROM PROJECT_FREELANCER
     JOIN users ON PROJECT_FREELANCER.freelancer_id = users.user_id
     WHERE PROJECT_FREELANCER.project_id = $1
@@ -313,9 +329,35 @@ router.get("/getUsernameClient", async (req, res) => {
     RIGHT JOIN PROJECT_FREELANCER ON PROJECT.project_id = PROJECT_FREELANCER.project_id
     JOIN CLIENT ON PROJECT.client_id = CLIENT.user_id
     JOIN USERS ON CLIENT.user_id = USERS.user_id
-    WHERE freelancer_id = $1;
+    WHERE freelancer_id = $1
+    ORDER BY PROJECT.project_name ASC;
     `;
     const values = [req.query.freelancer_id];
+
+    const result = await db.query(query, values);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error executing query:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/getUsernameClientNew", async (req, res) => {
+  try {
+    const { freelancer_id } = req.query;
+
+    // Menggunakan query SQL JOIN untuk mengambil freelancer_id dan nama pengguna (users.name)
+    const query = `
+    SELECT *
+    FROM PROJECT
+    RIGHT JOIN PROJECT_FREELANCER ON PROJECT.project_id = PROJECT_FREELANCER.project_id
+    JOIN CLIENT ON PROJECT.client_id = CLIENT.user_id
+    JOIN USERS ON CLIENT.user_id = USERS.user_id
+    WHERE freelancer_id = $1
+    ORDER BY PROJECT.project_name ASC;
+    `;
+    const values = [freelancer_id];
 
     const result = await db.query(query, values);
 
@@ -342,7 +384,45 @@ router.post("/projectfreelancer", (req, res) => {
       return;
     }
 
-    const insertQuery = "INSERT INTO project_freelancer (project_id, freelancer_id) VALUES ($1, $2)";
+    const insertQuery = "INSERT INTO project_freelancer (project_id, freelancer_id, destination) VALUES ($1, $2, 'CLIENT')";
+    db.query(insertQuery, [project_id, freelancer_id], (insertErr, insertResult) => {
+      if (insertErr) {
+        console.error("Error executing the INSERT query: ", insertErr);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      const updateQuery = "UPDATE project SET status = 'PENDING' WHERE project_id = $1";
+      db.query(updateQuery, [project_id], (updateErr, updateResult) => {
+        if (updateErr) {
+          console.error("Error executing the UPDATE query: ", updateErr);
+          res.status(500).send("Internal Server Error");
+          return;
+        }
+
+        res.status(201).send("Data inserted successfully");
+      });
+    });
+  });
+});
+
+router.post("/projectfreelancerfree", (req, res) => {
+  const { project_id, freelancer_id } = req.body;
+
+  const checkQuery = "SELECT * FROM project_freelancer WHERE project_id = $1 AND freelancer_id = $2";
+  db.query(checkQuery, [project_id, freelancer_id], (checkErr, checkResult) => {
+    if (checkErr) {
+      console.error("Error executing the SELECT query: ", checkErr);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+
+    if (checkResult.rows.length > 0) {
+      res.status(400).send("Data already exists");
+      return;
+    }
+
+    const insertQuery = "INSERT INTO project_freelancer (project_id, freelancer_id, destination) VALUES ($1, $2, 'FREELANCER')";
     db.query(insertQuery, [project_id, freelancer_id], (insertErr, insertResult) => {
       if (insertErr) {
         console.error("Error executing the INSERT query: ", insertErr);
@@ -533,9 +613,10 @@ router.get("/getprojectsone", (req, res) => {
   const project_id = req.query.project_id; // Menggunakan req.query untuk mendapatkan query parameter
   console.log("projectID", project_id);
   const query = `
-  SELECT project.*, client.*
+  SELECT project.*, client.*, project_freelancer.*
   FROM project
   LEFT JOIN client ON project.client_id = client.user_id
+  LEFT JOIN project_freelancer ON project.project_id = project_freelancer.project_id
   WHERE project.project_id = $1`; // Menggunakan parameterized query
   const values = [project_id];
 
@@ -571,7 +652,7 @@ router.get("/getprojectshire", (req, res) => {
   const client_id = req.query.client_id;
   console.log("client_id", client_id);
   const query = `
-    SELECT project.*, project_freelancer.*
+    SELECT project.*
     FROM project
     LEFT JOIN project_freelancer ON project.project_id = project_freelancer.project_id
     WHERE project.client_id = $1 AND project_freelancer.freelancer_id IS NULL`;
@@ -584,13 +665,14 @@ router.get("/getprojectshire", (req, res) => {
       return;
     }
     res.json(results.rows);
+    console.log(results.rows);
   });
 });
 
 router.get("/getprojectsfreelancer", async (req, res) => {
   try {
     const freelancerId = req.query.freelancer_id;
-    const query = `SELECT * FROM PROJECT RIGHT JOIN PROJECT_FREELANCER ON PROJECT.project_id = PROJECT_FREELANCER.project_id WHERE freelancer_id= $1`;
+    const query = `SELECT * FROM PROJECT RIGHT JOIN PROJECT_FREELANCER ON PROJECT.project_id = PROJECT_FREELANCER.project_id WHERE freelancer_id= $1 ORDER BY PROJECT.project_name ASC`;
     const values = [freelancerId];
 
     const { rows } = await db.query(query, values);
@@ -777,7 +859,7 @@ router.put("/updateprofile/:user_id", (req, res) => {
 router.put("/updateusers/:user_id", (req, res) => {
   console.log("Update user with id: ", req.params.user_id);
   const user_id = req.params.user_id;
-  const { name, username, phone, domicile, age, status, role, short_profile, cpassword } = req.body;
+  const { name, username, phone, domicile, age, status, role, short_profile, cpassword, image_url } = req.body;
 
   const query = `
       UPDATE users 
@@ -789,12 +871,13 @@ router.put("/updateusers/:user_id", (req, res) => {
           status = $6,
           role = $7, 
           short_profile = $8,
-          cpassword = $9
-      WHERE user_id = $10
+          cpassword = $9,
+          image_url = $10
+      WHERE user_id = $11
       RETURNING *
     `;
 
-  const values = [name, username, phone, domicile, age, status, role, short_profile, cpassword, user_id];
+  const values = [name, username, phone, domicile, age, status, role, short_profile, cpassword, image_url, user_id];
 
   db.query(query, values, (err, results) => {
     if (err) {

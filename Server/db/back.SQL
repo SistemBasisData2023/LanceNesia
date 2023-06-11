@@ -12,6 +12,7 @@ CREATE TYPE report_status AS ENUM ('ACCEPTED', 'PENDING', 'REJECTED');
 
 CREATE TYPE status_enum AS ENUM ('PENDING', 'DENIED', 'ACCEPTED', 'NOT STARTED', '25%', '50%', '75%', 'DONE');
 
+CREATE TYPE destination_enum AS ENUM ('FREELANCER', 'CLIENT');
 /* This query for create table */
 
 CREATE TABLE users (
@@ -43,7 +44,7 @@ CREATE TABLE freelancer (
 
 CREATE TABLE FREELANCER_EXPERIENCE (
     experience_id SERIAL PRIMARY KEY,
-    freelancer_id SERIAL,
+    freelancer_id BIGINT,
     project_name VARCHAR(50) NOT NULL,
     date DATE NOT NULL,
     short_job_description TEXT NOT NULL,
@@ -74,6 +75,7 @@ CREATE TABLE PROJECT_FREELANCER (
     project_freelancer_id SERIAL PRIMARY KEY,
     project_id BIGINT,
     freelancer_id BIGINT,
+    
     FOREIGN KEY (project_id) REFERENCES PROJECT(project_id),
     FOREIGN KEY (freelancer_id) REFERENCES FREELANCER(user_id)
 );

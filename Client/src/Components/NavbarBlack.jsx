@@ -13,6 +13,7 @@ const Navbar = (props) => {
     window.globalUsername = localStorage.getItem("globalUsername");
     window.globalUserId = localStorage.getItem("globalUserId");
     window.globalRole = localStorage.getItem("globalRole");
+    dispatch({ type: "USER", payload: true });
   }
 
   useEffect(() => {
@@ -37,7 +38,6 @@ const Navbar = (props) => {
         setUserRole(data[0].role);
         window.globalName = data[0].name;
         window.globalRole = data[0].role;
-        dispatch(window.globalState);
         console.log("User Name:", window.globalName);
       } catch (error) {
         console.log("Error fetching user role:", error);
@@ -45,7 +45,7 @@ const Navbar = (props) => {
     };
 
     fetchUserRole();
-  }, [dispatch]);
+  }, []);
 
   //* Login/Logout Functionality
   const RenderMenu = () => {

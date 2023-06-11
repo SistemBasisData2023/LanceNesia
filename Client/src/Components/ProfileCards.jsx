@@ -63,7 +63,9 @@ const ProfileCards = (props) => {
 
               <div className="card-break"></div>
               <div className="profile-reviews">{props.proReviews} Customer Reviews</div>
-              <button className="profile-book">HIRE NOW</button>
+              <button onClick={() => handleSeeProfileClick(props.id)} className="profile-book">
+                HIRE NOW
+              </button>
             </div>
           </div>
         </div>

@@ -5,6 +5,9 @@ import { EyeIcon, EyeSlashIcon as EyeOffIcon } from "@heroicons/react/24/solid";
 import Sidebar from "../Sidebar";
 import Navbar from "../NavbarBlack";
 import Footer from "../Footer";
+import { ref, uploadBytes, getDownloadURL, listAll, list } from "firebase/storage";
+import { storage } from "../../context/firebase";
+import { v4 } from "uuid";
 
 const UpdateUsers = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -22,14 +25,16 @@ const UpdateUsers = () => {
     short_profile: "",
     role: "",
     status: "",
+    image_url: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
+    console.log("User ID 2: ", window.globalNewId);
     // Lakukan permintaan GET untuk mendapatkan data pengguna
     axios
-      .get(`/getusersone?user_id=${window.globalUserId}`)
+      .get(`/getusersone?user_id=${window.globalNewId}`)
       .then((response) => {
         const userData = response.data[0]; // Mengambil data pertama dari array
         setFormData(userData);
@@ -54,7 +59,7 @@ const UpdateUsers = () => {
     e.preventDefault();
     // Kirim data update ke backend
     axios
-      .put(`/updateusers/${window.globalUserId}`, formData)
+      .put(`/updateusers/${window.globalNewId}`, formData)
       .then((response) => {
         console.log("Data updated successfully");
         // Lakukan tindakan setelah berhasil melakukan update
@@ -63,6 +68,27 @@ const UpdateUsers = () => {
       .catch((error) => {
         console.error("Error updating data: ", error);
       });
+  };
+
+  const [imageUpload, setImageUpload] = useState(null);
+  const [imageUrls, setImageUrls] = useState([]);
+  const [imageUrlNow, setImageUrlNow] = useState(null);
+
+  const imagesListRef = ref(storage, "images/");
+
+  const uploadFile = (event) => {
+    event.preventDefault(); // Mencegah perilaku default form
+
+    if (imageUpload == null) return;
+    const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+    uploadBytes(imageRef, imageUpload).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        setImageUrls([url]); // Mengganti imageUrls dengan array baru yang hanya berisi URL gambar terbaru
+        console.log("Image URL: ", url);
+        formData.image_url = url;
+        setImageUrlNow(url);
+      });
+    });
   };
 
   const toggleShowPassword = () => {
@@ -86,9 +112,25 @@ const UpdateUsers = () => {
       <div className="flex">
         <Sidebar activeTable={activeTableIndex} handleTableClick={handleTableClick} className="mt-8" />
         <div className="w-3/4 p-4 mt-20">
+          <div className="flex justify-center mb-8">
+            <img src={imageUrlNow || formData.image_url || "https://ik.imagekit.io/abdfikih/User-Profile-Icon-9mces.png?updatedAt=1686397269218"} alt="Profile Picture" className="w-40 h-40 rounded-full" />
+          </div>
           {/* Form Update */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
+              <input
+                type="file"
+                onChange={(event) => {
+                  setImageUpload(event.target.files[0]);
+                }}
+                className="mt-1 p-2 rounded-md w-full justify-end items-end text-end"
+              />
+              <div>
+                <button onClick={uploadFile} className="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                  {" "}
+                  Upload Image
+                </button>
+              </div>
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                   Name:

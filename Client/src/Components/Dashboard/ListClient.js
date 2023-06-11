@@ -72,8 +72,8 @@ const UserListPage = () => {
   };
 
   const handleEdit = (user) => {
-    window.globalUserId = user.user_id;
-    console.log("Edit user:", user);
+    window.globalNewId = user.user_id;
+    console.log("Edit user window:", window.globalNewId);
     navigate("/Dashboard/ListClient/UpdateUsers");
   };
 

@@ -54,18 +54,22 @@ const ProjectFreelancer = () => {
       //Mengambil data username untuk setiap project
       const usernamesData = {};
       for (const project of projectsData) {
-        const usernameResponse = await axios.get(`/getUsernameClient?freelancer_id=${window.globalUserId}`);
+        const usernameResponse = await axios.get(`/getUsernameClientNew?freelancer_id=${window.globalUserId}`);
         const usernames = usernameResponse.data.map((user) => user.name); // Mengambil array nama pengguna dari respons
         const companyNames = usernameResponse.data.map((user) => user.company_name); // Menambahkan array nama perusahaan dari respons
+        const destination = usernameResponse.data.map((user) => user.destination); // Menambahkan array nama perusahaan dari respons
+
         usernamesData[project.project_id] = {
           usernames,
           companyNames, // Menyimpan array nama perusahaan dalam objek
+          destination,
         };
         console.log("Usernames data:", usernamesData);
       }
       setUsernames(usernamesData);
 
       setIsLoading(false);
+      console.log("Usernames data 2:", usernames);
       console.log("Projects data:", projectsData);
     } catch (error) {
       console.error("Error fetching projects data: ", error);
@@ -97,9 +101,12 @@ const ProjectFreelancer = () => {
   };
 
   const handleEdit = (project) => {
+    console.log("ID Global: ", window.globalUserId);
     window.globalProjectId = project.project_id;
+    console.log("Project ID: ", window.globalProjectId);
     console.log("Edit report:", project);
-    window.globalFreelancerName = usernames[project.project_id][0];
+    console.log("Edit ID: ", usernames[project.project_id].usernames[0]);
+    window.globalFreelancerName = usernames[project.project_id].usernames[0];
     console.log("Freelancer name:", window.globalFreelancerName);
     console.log("Freelancer id:", project);
     navigate("/UpdateProject");
@@ -147,6 +154,7 @@ const ProjectFreelancer = () => {
                       <th className="px-6 py-3 bg-blue-300 text-left font-semibold text-sm uppercase border-b">Company</th>
                       <th className="px-6 py-3 bg-blue-300 text-left font-semibold text-sm uppercase border-b">Timeline</th>
                       <th className="px-6 py-3 bg-blue-300 text-left font-semibold text-sm uppercase border-b">Status</th>
+                      <th className="px-6 py-3 bg-blue-300 text-left font-semibold text-sm uppercase border-b">Sender</th>
                       <th className="px-6 py-3 bg-blue-300 text-left font-semibold text-sm uppercase border-b">Actions</th>
                     </tr>
                   </thead>
@@ -159,6 +167,7 @@ const ProjectFreelancer = () => {
                         <td className="px-6 py-4 whitespace-nowrap">{usernames[project.project_id] ? usernames[project.project_id].companyNames[index] : ""}</td>
                         <td className="px-6 py-4 whitespace-nowrap">{project.timeline}</td>
                         <td className="px-6 py-4 whitespace-nowrap">{project.status}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{usernames[project.project_id] ? usernames[project.project_id].destination[index] : ""}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="relative inline-block">
                             <button className="text-gray-500 hover:text-gray-700" onClick={() => handleMenuClick(index)}>

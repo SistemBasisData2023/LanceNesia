@@ -54,12 +54,7 @@ const Filter = () => {
       <Wrapper>
         <article>
           <div className="findjobs">
-            <div
-              data-aos="fade-right"
-              data-duration="3000"
-              data-aos-offset="300"
-              className="filter"
-            >
+            <div data-aos="fade-right" data-duration="3000" data-aos-offset="300" className="filter">
               <h1 id="filer-title"> Filter by: </h1> <br />
               <div id="divider-h"></div>
               <form>
@@ -68,73 +63,42 @@ const Filter = () => {
                     <b>Category:</b>
                   </p>
                   <label className="cate-jobs-p">
-                    <input
-                      className="filter-check"
-                      type="checkbox"
-                      name="category"
-                      value={"Writing & Translation"}
-                      onClick={updateFilterValue}
-                    />
-                    Writing & Translation
+                    <input className="filter-check" type="checkbox" name="category" value={"Web Development"} onClick={updateFilterValue} />
+                    Web Development
                   </label>
 
                   <label className="cate-jobs-p">
-                    <input
-                      type="checkbox"
-                      className="filter-check"
-                      name="category"
-                      value={"Programming & Development"}
-                    />
-                    Programming & &nbsp;&nbsp;&nbsp;&nbsp; Development
+                    <input type="checkbox" className="filter-check" name="category" value={"Data Analytic"} />
+                    Data Analytic
                   </label>
 
                   <label className="cate-jobs-p">
-                    <input
-                      type="checkbox"
-                      className="filter-check"
-                      name="category"
-                      value={"Administrative & Secretarial"}
-                    />
-                    Administrative & Secretarial
+                    <input type="checkbox" className="filter-check" name="category" value={"Android Developer"} />
+                    Android Developer
                   </label>
 
                   <label className="cate-jobs-p">
-                    <input
-                      type="checkbox"
-                      className="filter-check"
-                      name="category"
-                      value={" Design & Art"}
-                    />
-                    Design & Art
+                    <input type="checkbox" className="filter-check" name="category" value={" Designer"} />
+                    Designer
                   </label>
 
                   <label className="cate-jobs-p">
-                    <input
-                      type="checkbox"
-                      className="filter-check"
-                      name="category"
-                      value={"Business & Finance"}
-                    />
-                    Business & Finance
+                    <input type="checkbox" className="filter-check" name="category" value={"Video Grapher"} />
+                    Video Grapher
                   </label>
 
                   <label className="cate-jobs-p">
-                    <input
-                      type="checkbox"
-                      className="filter-check"
-                      name="category"
-                      value={"Sales & Marketing"}
-                    />
-                    Sales & Marketing
+                    <input type="checkbox" className="filter-check" name="category" value={"Article Writing"} />
+                    Article Writing
                   </label>
 
                   <label className="cate-jobs-p">
-                    <input
-                      type="checkbox"
-                      className="filter-check"
-                      name="category"
-                      value={"Others"}
-                    />
+                    <input type="checkbox" className="filter-check" name="category" value={"Graphic Design"} />
+                    Graphic Design
+                  </label>
+
+                  <label className="cate-jobs-p">
+                    <input type="checkbox" className="filter-check" name="category" value={"Others"} />
                     Others
                   </label>
                 </div>
@@ -146,20 +110,10 @@ const Filter = () => {
                     <b>Title</b>
                   </p>
                   <div>
-                    <select
-                      id="cate-post-time"
-                      name="title"
-                      className="sort-by-time"
-                      onClick={updateFilterValue}
-                    >
+                    <select id="cate-post-time" name="title" className="sort-by-time" onClick={updateFilterValue}>
                       {categoryData.map((curElem, index) => {
                         return (
-                          <option
-                            key={index}
-                            type="button"
-                            name="title"
-                            value={curElem}
-                          >
+                          <option key={index} type="button" name="title" value={curElem}>
                             {curElem}
                           </option>
                         );
@@ -175,13 +129,11 @@ const Filter = () => {
                     <b>Posted timeline:</b>
                   </p>
                   <label>
-                    <input type="radio" name="posted-time" id="cate-post-new" />{" "}
-                    Newest First
+                    <input type="radio" name="posted-time" id="cate-post-new" /> Newest First
                   </label>
 
                   <label>
-                    <input type="radio" name="posted-time" id="cate-post-old" />{" "}
-                    Oldest First
+                    <input type="radio" name="posted-time" id="cate-post-old" /> Oldest First
                   </label>
                 </div>
                 <hr />
@@ -189,11 +141,7 @@ const Filter = () => {
                   <p>
                     <b>Job Duration:</b>
                   </p>
-                  <select
-                    name="title"
-                    id="cate-post-time"
-                    className="sort-by-time"
-                  >
+                  <select name="title" id="cate-post-time" className="sort-by-time">
                     <option value="All Durations">All Durations</option>
                     <option value="hourly">Hourly</option>
                     <option value="Less than a week">Less than a week</option>
@@ -205,13 +153,7 @@ const Filter = () => {
                   <hr />
                   <p style={{ marginTop: "2rem" }}>
                     <b>Specify the Range:</b>
-                    <input
-                      style={{ marginTop: "1rem" }}
-                      type="range"
-                      oninput="num.value = this.value"
-                      min="1"
-                      max="100"
-                    />
+                    <input style={{ marginTop: "1rem" }} type="range" oninput="num.value = this.value" min="1" max="100" />
                     &nbsp;&nbsp;&nbsp;<output id="num">{oninput}</output>
                   </p>
                   <button className="cbutton" onclick={reset}>
@@ -220,19 +162,8 @@ const Filter = () => {
                 </div>
               </form>
             </div>
-            <div
-              data-aos="fade-left"
-              data-duration="3000"
-              data-aos-offset="300"
-              className="jobs"
-            >
-              <ul
-                data-aos="fade-up"
-                data-duration="3000"
-                data-aos-offset="300"
-                data-aos-anchor-placement="top-bottom"
-                className="inside-jobs"
-              >
+            <div data-aos="fade-left" data-duration="3000" data-aos-offset="300" className="jobs">
+              <ul data-aos="fade-up" data-duration="3000" data-aos-offset="300" data-aos-anchor-placement="top-bottom" className="inside-jobs">
                 {/* //* Uncomment this when an app starts */}
                 {all_jobs.map((curElem) => {
                   return <Cards key={curElem._id} {...curElem} />;
@@ -287,7 +218,9 @@ const Wrapper = styled.section`
   .cate-jobs-p {
     font-family: "Poppins", sans-serif;
     font-size: 0.9rem;
+    font-margin-left: 0.5rem;
     margin-top: 0.15rem;
+    margein
     user-select: none;
   }
 
@@ -427,9 +360,7 @@ const Wrapper = styled.section`
     text-align: center;
     margin: 10px 3px;
     border-radius: 10px;
-    box-shadow: 0px 0px 3.6px rgba(0, 0, 0, 0.017),
-      0px 0px 10px rgba(0, 0, 0, 0.025), 0px 0px 24.1px rgba(0, 0, 0, 0.033),
-      0px 0px 80px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 0px 3.6px rgba(0, 0, 0, 0.017), 0px 0px 10px rgba(0, 0, 0, 0.025), 0px 0px 24.1px rgba(0, 0, 0, 0.033), 0px 0px 80px rgba(0, 0, 0, 0.05);
     transition: 100ms;
   }
 

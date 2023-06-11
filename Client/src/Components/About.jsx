@@ -166,7 +166,7 @@ const About = () => {
           <div className="container">
             <div data-aos="fade-right" data-aos-offset="300" data-aos-easing="ease-in-out" className="about-card">
               <div className="img">
-                <img src="/" alt="" />
+                <img src="https://ik.imagekit.io/abdfikih/fikih_dp.jpg?updatedAt=1686482275052" alt="" />
               </div>
               <div className="info">
                 <h3>Abdul Fikih Kurnia</h3>
@@ -198,7 +198,7 @@ const About = () => {
 
             <div data-aos="fade-down" data-aos-offset="300" data-aos-easing="ease-in-out" className="about-card">
               <div className="img">
-                <img src="/" alt="" />
+                <img src="https://ik.imagekit.io/abdfikih/aqil_dp.jpg?updatedAt=1686483229610" alt="" />
               </div>
               <div className="info">
                 <h3>M Aqil Muzakky</h3>
@@ -230,7 +230,7 @@ const About = () => {
 
             <div data-aos="fade-left" data-aos-offset="300" data-aos-easing="ease-in-out" className="about-card">
               <div className="img">
-                <img src="/" alt="" />
+                <img src="https://ik.imagekit.io/abdfikih/coki_dp.jpg?updatedAt=1686482274124" alt="" />
               </div>
               <div className="info">
                 <h3>Syauqi Aulia</h3>
