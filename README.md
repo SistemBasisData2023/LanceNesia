@@ -65,8 +65,6 @@ Clients can create detailed project listings, outlining their requirements, proj
 
 Freelancers can easily search and filter through the available projects based on various criteria such as project category, budget range, and location. This feature ensures that freelancers can find projects that align with their skills and interests.
 
-<<<<<<< HEAD
-=======
 ### Transaction Processing
 
 The Freelancer Marketplace offers a secure transaction processing system, allowing clients to make transactions to freelancers upon successful completion of the project. This feature ensures a smooth and transparent transaction process, giving both parties peace of mind.
@@ -79,7 +77,6 @@ Freelancers will be able to apply directly for open project positions that will 
 
 This website will be closely monitored by our admin who has full and extensive access towards all database used within: freelancers, client, project, as well as reports. The last one being a mechanism to ensure user experience by making sure all complaints are addressed, which the admin will then be able to resolve by taking further action if needed, such if by banning accounts.
 
->>>>>>> c04c37cba9976b7f87a74de21ec81e8dc60e2301
 ## Technologies
 
 The Freelancer Marketplace is built using the following technologies:
@@ -199,9 +196,10 @@ The following are tables that is used in LanceNesia's database.
 1. project_freelancer_id
 2. project_id
 3. freelancer_id
-<<<<<<< HEAD
-4. destination_enum
-=======
-4. destination
->>>>>>> 988d6833a73181b0a9d8113f3313ccfbec34c0ed
 ```
+
+## Documentation
+
+Link to report progress:
+
+https://drive.google.com/drive/folders/13dQOAechz5fEV3QvFCsq6YFNr9j7uM3d?usp=sharing
